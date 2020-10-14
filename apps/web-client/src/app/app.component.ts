@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'wc-root',
@@ -8,7 +8,7 @@ export class AppComponent {
   chats = [
     {
       contact: {
-        name: 'Sample name 1',
+        name: 'Daniel M',
         thumbnail: 'asd.jpg',
       },
       lastMessage: {
@@ -18,11 +18,21 @@ export class AppComponent {
     },
     {
       contact: {
-        name: 'Sample name 2',
+        name: 'John Smith',
         thumbnail: 'asd.jpg',
       },
       lastMessage: {
-        body: 'asdasd asdasd adsas',
+        body: 'asdasd asdasd adsas asdasd asdasd adsas asdasd asdasd adsas',
+        date: new Date(Date.now()),
+      },
+    },
+    {
+      contact: {
+        name: 'Bill Clinton',
+        thumbnail: 'asd.jpg',
+      },
+      lastMessage: {
+        body: 'asdasd asdasd adsas asdasd asdasd adsas asdasd asdasd adsas',
         date: new Date(Date.now()),
       },
     },

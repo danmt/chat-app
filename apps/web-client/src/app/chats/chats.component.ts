@@ -1,14 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'wc-chats',
   templateUrl: './chats.component.html',
-  styleUrls: ['./chats.component.scss'],
 })
-export class ChatsComponent implements OnInit {
+export class ChatsComponent {
   @Input() chats: any[] = [];
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

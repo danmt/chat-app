@@ -1,8 +1,25 @@
-<article *ngFor="let chat of chats">
-  <figure>
-    <img [src]="chat.contact.thumbnail" alt="" />
+<article
+  *ngFor="let chat of chats"
+  class="w-full flex border-b-2 border-gray-400"
+  style="padding: 10px;"
+>
+  <figure
+    class="rounded-full border-black border-2 overflow-hidden"
+    style="width: 50px; height: 50px;"
+  >
+    <img
+      src="assets/img/avatar.webp"
+      alt=""
+      class="w-full h-full object-cover"
+    />
   </figure>
-  <h2>{{ chat.contact.name }}</h2>
-  <p>{{ chat.lastMessage.body }}</p>
-  <span>{{ chat.lastMessage.date }}</span>
+  <div style="width: 230px;" class="pl-4">
+    <h2 class="text-base font-bold truncate">
+      {{ chat.contact.name }}
+    </h2>
+    <p class="text-sm text-gray-700 truncate">{{ chat.lastMessage.body }}</p>
+  </div>
+  <span class="text-xs text-gray-600 text-right" style="width: 100px;">
+    {{ chat.lastMessage.date | date: 'MM/dd/yyyy' }}
+  </span>
 </article>

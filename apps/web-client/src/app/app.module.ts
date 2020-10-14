@@ -3,16 +3,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { ChatsComponent } from './chats/chats.component';
+import { ChatsModule } from './chats/chats.module';
 
 @NgModule({
-  declarations: [AppComponent, ChatsComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
+    ChatsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
-  exports: [ChatsComponent],
 })
 export class AppModule {}
