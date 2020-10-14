@@ -22,5 +22,13 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "web-client": {
+      "tags": []
+    },
+    "web-client-e2e": {
+      "tags": [],
+      "implicitDependencies": ["web-client"]
+    }
+  }
 }
