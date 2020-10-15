@@ -1,93 +1,46 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { filter, map, skip, take } from 'rxjs/operators';
+
+import * as fromApp from './core/state';
+import { ChatsComponentActions } from './chats/actions';
 
 @Component({
   selector: 'wc-root',
   templateUrl: './app.component.html',
 })
-export class AppComponent {
-  chats = [
-    {
-      contact: {
-        name: 'Daniel M',
-        thumbnail: 'asd.jpg',
-      },
-      lastMessage: {
-        body: 'asdasd asdasd adsas',
-        date: new Date(Date.now()),
-      },
-    },
-    {
-      contact: {
-        name: 'John Smith',
-        thumbnail: 'asd.jpg',
-      },
-      lastMessage: {
-        body: 'asdasd asdasd adsas asdasd asdasd adsas asdasd asdasd adsas',
-        date: new Date(Date.now()),
-      },
-    },
-    {
-      contact: {
-        name: 'Bill Clinton',
-        thumbnail: 'asd.jpg',
-      },
-      lastMessage: {
-        body: 'asdasd asdasd adsas asdasd asdasd adsas asdasd asdasd adsas',
-        date: new Date(Date.now()),
-      },
-    },
-  ];
-  chat = {
-    receiver: {
-      name: 'Juanita',
-      thumbnail: 'asd.jpg',
-    },
-    messages: [
-      {
-        body: 'Hola',
-        date: new Date(Date.now()),
-        authorId: 0,
-      },
-      {
-        body: 'Como estas?',
-        date: new Date(Date.now()),
-        authorId: 0,
-      },
-      {
-        body: 'Todo bien y tu?',
-        date: new Date(Date.now()),
-        authorId: 1,
-      },
-      {
-        body: 'Aqui...',
-        date: new Date(Date.now()),
-        authorId: 0,
-      },
-      {
-        body: 'Y eso?',
-        date: new Date(Date.now()),
-        authorId: 1,
-      },
-      {
-        body: 'Acabo de recordar....',
-        date: new Date(Date.now()),
-        authorId: 1,
-      },
-      {
-        body: 'BOOOOOOOOOOOOORING',
-        date: new Date(Date.now()),
-        authorId: 1,
-      },
-      {
-        body: 'Que bicho',
-        date: new Date(Date.now()),
-        authorId: 0,
-      },
-      {
-        body: 'Llora puessssss',
-        date: new Date(Date.now()),
-        authorId: 1,
-      },
-    ],
-  };
+export class AppComponent implements OnInit {
+  chats$ = this.store.select(fromApp.selectChatsList, 1);
+  receiver$ = this.store.select(fromApp.selectChatReceiver, 1);
+  chat$ = this.store.select(fromApp.selectChat);
+
+  constructor(
+    private store: Store<fromApp.State>,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    this.store.dispatch(ChatsComponentActions.getChats());
+
+    this.route.queryParams
+      .pipe(
+        map(({ activeId }) => activeId),
+        filter((activeId) => activeId),
+        take(1)
+      )
+      .subscribe((activeId) => this.onActivateChat(parseInt(activeId, 10)));
+
+    this.store
+      .select(fromApp.selectChatsActiveId)
+      .pipe(filter((activeId) => activeId !== -1))
+      .subscribe((activeId) =>
+        this.router.navigate([''], { queryParams: { activeId } })
+      );
+  }
+
+  onActivateChat(chatId: number) {
+    this.store.dispatch(ChatsComponentActions.activateChat({ chatId }));
+  }
 }

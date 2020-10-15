@@ -1,16 +1,19 @@
 <div class="py-4 h-screen bg-gray-400">
   <div class="mx-auto bg-white shadow-lg" style="width: 1200px; height: 732px;">
     <header class="border-black border-b-2" style="height: 72px;">
-      <wc-header [receiver]="chat.receiver"></wc-header>
+      <wc-header [receiver]="receiver$ | async"></wc-header>
     </header>
 
     <div class="flex" style="height: 660px;">
       <aside class="h-full border-r-2 inline-block" style="width: 400px;">
-        <wc-chats [chats]="chats"></wc-chats>
+        <wc-chats
+          [chats]="chats$ | async"
+          (activateChat)="onActivateChat($event)"
+        ></wc-chats>
       </aside>
 
       <main class="h-full inline-block" style="width: 800px;">
-        <wc-chat [chat]="chat" [currentId]="1"></wc-chat>
+        <wc-chat [chat]="chat$ | async" [currentId]="1"></wc-chat>
       </main>
     </div>
   </div>

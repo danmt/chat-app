@@ -1,13 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IUser } from '@chat-app/api-interface';
 
 @Component({
   selector: 'wc-header',
   templateUrl: './header.component.html',
 })
-export class HeaderComponent implements OnInit {
-  @Input() receiver: any;
-
-  constructor() {}
-
-  ngOnInit(): void {}
+export class HeaderComponent {
+  @Input() receiver: IUser | null = null;
 }

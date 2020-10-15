@@ -1,3 +1,3 @@
 module.exports = {
-  projects: ['<rootDir>/apps/web-client'],
+  projects: ['<rootDir>/apps/web-client', '<rootDir>/libs/api-interface'],
 };

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IChat } from '@chat-app/api-interface';
 
 @Component({
   selector: 'wc-chat',
@@ -6,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ChatComponent implements OnInit {
   @Input() currentId = -1;
-  @Input() chat: any;
+  @Input() chat: IChat | null = null;
 
   constructor() {}
 
