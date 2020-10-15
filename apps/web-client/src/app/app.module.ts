@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { ChatsModule } from './chats/chats.module';
+import { HeaderModule } from './header/header.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -11,6 +12,7 @@ import { ChatsModule } from './chats/chats.module';
     BrowserModule,
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
     ChatsModule,
+    HeaderModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
