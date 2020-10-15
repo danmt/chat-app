@@ -38,6 +38,10 @@ export class AppComponent {
     },
   ];
   chat = {
+    receiver: {
+      name: 'Juanita',
+      thumbnail: 'asd.jpg',
+    },
     messages: [
       {
         body: 'Hola',

@@ -15,9 +15,21 @@
     </div>
   </div>
 
-  <div style="width: 800px;" class="h-full flex items-center">
-    <p class="text-4xl pl-4">
-      Chat person
-    </p>
+  <div style="width: 800px;" class="h-full">
+    <div class="flex items-center" style="padding: 10px;">
+      <figure
+        class="rounded-full border-black border-2 overflow-hidden"
+        style="width: 50px; height: 50px;"
+      >
+        <img
+          src="assets/img/avatar.webp"
+          alt=""
+          class="w-full h-full object-cover"
+        />
+      </figure>
+      <p style="width: 330px;" class="text-4xl pl-4">
+        {{ receiver.name }}
+      </p>
+    </div>
   </div>
 </div>
