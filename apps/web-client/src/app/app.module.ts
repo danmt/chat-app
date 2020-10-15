@@ -12,10 +12,21 @@ import { HeaderModule } from './header/header.module';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([], { initialNavigation: 'enabled' }),
-    ChatsModule,
-    HeaderModule,
-    ChatModule,
+    RouterModule.forRoot(
+      [
+        {
+          path: '',
+          loadChildren: () =>
+            import('./home/home.module').then((m) => m.HomeModule),
+        },
+        {
+          path: 'login',
+          loadChildren: () =>
+            import('./login/login.module').then((m) => m.LoginModule),
+        },
+      ],
+      { initialNavigation: 'enabled' }
+    ),
     CoreModule,
   ],
   providers: [],
