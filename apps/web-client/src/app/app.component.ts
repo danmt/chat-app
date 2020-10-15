@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { filter, map, skip, take } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 
 import * as fromApp from './core/state';
 import { ChatsComponentActions } from './chats/actions';
