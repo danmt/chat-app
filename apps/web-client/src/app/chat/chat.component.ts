@@ -7,7 +7,7 @@ import { IChat } from '@chat-app/api-interface';
 })
 export class ChatComponent implements OnInit {
   @Input() currentId = -1;
-  @Input() chat!: IChat;
+  @Input() chat: IChat | null = null;
 
   constructor() {}
 
