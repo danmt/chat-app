@@ -15,3 +15,9 @@ export interface IChat {
   participants: [IUser, IUser];
   messages: IMessage[];
 }
+
+export interface IChatTab {
+  id: number;
+  contact?: IUser;
+  lastMessage?: IMessage;
+}

@@ -6,5 +6,5 @@ import { IUser } from '@chat-app/api-interface';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  @Input() receiver: IUser | null = null;
+  @Input() receiver!: IUser;
 }

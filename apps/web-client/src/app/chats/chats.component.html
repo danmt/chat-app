@@ -16,11 +16,11 @@
   </figure>
   <div style="width: 230px;" class="pl-4">
     <h2 class="text-base font-bold truncate">
-      {{ chat.contact.name }}
+      {{ chat?.contact?.name }}
     </h2>
-    <p class="text-sm text-gray-700 truncate">{{ chat.lastMessage.body }}</p>
+    <p class="text-sm text-gray-700 truncate">{{ chat?.lastMessage?.body }}</p>
   </div>
   <span class="text-xs text-gray-600 text-right" style="width: 100px;">
-    {{ chat.lastMessage.date | date: 'MM/dd/yyyy' }}
+    {{ chat?.lastMessage?.date | date: 'MM/dd/yyyy' }}
   </span>
 </article>
