@@ -4,13 +4,14 @@ import { IChat, IMessage, IUser, IChatTab } from '@chat-app/api-interface';
 import { ChatsComponentActions, ChatsApiActions } from '../../chats/actions';
 
 export interface State {
-  data?: IChat[];
+  data: IChat[] | null;
   pending: boolean;
   error: Error | null;
   activeId: number;
 }
 
 export const initialState = {
+  data: null,
   pending: false,
   error: null,
   activeId: -1,
@@ -36,7 +37,7 @@ const chatReducer = createReducer(
     ...state,
     pending: false,
     error: action.error,
-    data: undefined,
+    data: null,
   }))
 );
 
@@ -46,10 +47,7 @@ export function reducer(state = initialState, action: Action) {
 
 export const selectChatsData = (state: State) => state.data;
 export const selectChatsActiveId = (state: State) => state.activeId;
-export const selectChatsList = (
-  chats: IChat[] | undefined,
-  currentUserId: number
-) =>
+export const selectChatsList = (chats: IChat[] | null, currentUserId: number) =>
   chats &&
   chats.map(
     (chat) =>
@@ -65,14 +63,34 @@ export const selectChatsList = (
   );
 export const selectChatsPending = (state: State) => state.pending;
 export const selectChatsError = (state: State) => state.error;
-export const selectChat = (chats: IChat[] | undefined, activeId: number) =>
-  chats && chats.find((chat: IChat) => chat.id === activeId);
+export const selectChat = (chats: IChat[] | null, activeId: number) => {
+  if (!chats) {
+    return null;
+  }
+
+  const selectedChat = chats.find((chat: IChat) => chat.id === activeId);
+
+  if (!selectedChat) {
+    return null;
+  }
+
+  return selectedChat;
+};
 export const selectChatReceiver = (
-  chat: IChat | undefined,
+  chat: IChat | null,
   currentUserId: number
-) =>
-  chat &&
-  chat.participants &&
-  chat.participants.find(
-    (participant: IUser) => currentUserId !== participant.id
+) => {
+  if (!chat || !chat.participants) {
+    return null;
+  }
+
+  const receiver = chat.participants.find(
+    (participant: IUser) => participant.id !== currentUserId
   );
+
+  if (!receiver) {
+    return null;
+  }
+
+  return receiver;
+};
