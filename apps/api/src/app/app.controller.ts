@@ -7,7 +7,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('/login')
-  login(@Body() username: string) {
+  login(@Body('username') username: string) {
     return this.appService.login(username);
   }
 }
