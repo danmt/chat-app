@@ -5,19 +5,33 @@ import {
   HttpRequest,
   HttpHandler,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { EMPTY, Observable } from 'rxjs';
+import { mergeMap, take } from 'rxjs/operators';
+
+import * as fromApp from '../state';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private router: Router, private store: Store<fromApp.State>) {}
 
   intercept(
     httpRequest: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return next.handle(
-      httpRequest.clone({ setHeaders: { id: this.authService.id } })
+    return this.store.select(fromApp.selectAuth).pipe(
+      take(1),
+      mergeMap((user) => {
+        if (user) {
+          return next.handle(
+            httpRequest.clone({ setHeaders: { id: user._id } })
+          );
+        } else if (this.router.url === '/login') {
+          return next.handle(httpRequest);
+        }
+        return EMPTY;
+      })
     );
   }
 }

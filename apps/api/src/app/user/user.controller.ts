@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode } from '@nestjs/common';
 
 import { UserService } from './user.service';
 
@@ -7,6 +7,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/login')
+  @HttpCode(200)
   login(@Body('username') username: string) {
     return this.userService.login(username);
   }

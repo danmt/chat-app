@@ -1,4 +1,11 @@
-import { Controller, Post, Body, Headers, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  Param,
+  HttpCode,
+} from '@nestjs/common';
 
 import { MessageService } from './message.service';
 
@@ -7,6 +14,7 @@ export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
   @Post()
+  @HttpCode(200)
   sendMessage(
     @Param('chat_id') chatId: string,
     @Headers('id') authorId: string,

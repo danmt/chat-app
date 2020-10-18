@@ -9,6 +9,7 @@ import { reducers, metaReducers } from './state';
 import { effects } from './effects';
 import { environment } from '../../environments/environment';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 
 @NgModule({
   declarations: [],
@@ -21,6 +22,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
       maxAge: 25,
       logOnly: environment.production,
     }),
+    NgxWebstorageModule.forRoot({}),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

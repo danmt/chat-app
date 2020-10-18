@@ -7,10 +7,14 @@
   </header>
 
   <main class="mt-4 pb-8">
-    <form>
+    <form [formGroup]="userGroup" (ngSubmit)="onLogin()">
       <label class="w-5/6 mx-auto block">
         <p>Username</p>
-        <input type="text" class="w-full border-b-2 border-black text-sm" />
+        <input
+          type="text"
+          class="w-full border-b-2 border-black text-sm"
+          formControlName="username"
+        />
       </label>
 
       <div class="flex justify-around w-3/4 mx-auto mt-8">

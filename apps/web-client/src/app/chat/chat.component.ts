@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { IChat } from '@chat-app/api-interface';
+import { IChat, IUser } from '@chat-app/api-interface';
 
 @Component({
   selector: 'wc-chat',
   templateUrl: './chat.component.html',
 })
-export class ChatComponent implements OnInit {
-  @Input() currentUserId!: string;
+export class ChatComponent {
+  @Input() currentUser!: IUser | null;
   @Input() chat!: IChat | null;
   @Output() sendMessage = new EventEmitter<{ chatId: string; body: string }>();
 
@@ -16,8 +16,6 @@ export class ChatComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   onSendMessage(chatId?: string) {
     if (this.chatGroup.invalid || !chatId) {

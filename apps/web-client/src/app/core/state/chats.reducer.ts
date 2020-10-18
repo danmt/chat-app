@@ -37,6 +37,15 @@ const chatReducer = createReducer(
     pending: false,
     error: action.error,
     data: null,
+  })),
+  on(ChatsApiActions.messageSent, (state, action) => ({
+    ...state,
+    data: !state.data
+      ? null
+      : state.data.map((chat) => ({
+          ...chat,
+          messages: [...chat.messages, action.message],
+        })),
   }))
 );
 
@@ -46,25 +55,22 @@ export function reducer(state = initialState, action: Action) {
 
 export const selectChatsData = (state: State) => state.data;
 export const selectChatsActiveId = (state: State) => state.activeId;
-export const selectChatsList = (
-  chats: IChat[] | null,
-  currentUserId: string
-) => {
-  console.log(chats, currentUserId);
-  return (
-    chats &&
-    chats.map(
-      (chat) =>
-        ({
-          _id: chat._id,
-          contact: chat.participants.find(
-            (participant: IUser) => currentUserId !== participant._id
-          ),
-          lastMessage: chat.messages.find(
-            (message: IMessage) => currentUserId !== message.authorId
-          ),
-        } as IChatTab)
-    )
+export const selectChatsList = (chats: IChat[] | null, user: IUser | null) => {
+  if (!chats || !user) {
+    return null;
+  }
+
+  return chats.map(
+    (chat) =>
+      ({
+        _id: chat._id,
+        contact: chat.participants.find(
+          (participant: IUser) => user._id !== participant._id
+        ),
+        lastMessage: chat.messages.find(
+          (message: IMessage) => user._id !== message.authorId
+        ),
+      } as IChatTab)
   );
 };
 export const selectChatsPending = (state: State) => state.pending;
@@ -82,16 +88,13 @@ export const selectChat = (chats: IChat[] | null, activeId?: string) => {
 
   return selectedChat;
 };
-export const selectChatReceiver = (
-  chat: IChat | null,
-  currentUserId: string
-) => {
-  if (!chat || !chat.participants) {
+export const selectChatReceiver = (chat: IChat | null, user: IUser | null) => {
+  if (!chat || !chat.participants || !user) {
     return null;
   }
 
   const receiver = chat.participants.find(
-    (participant: IUser) => participant._id !== currentUserId
+    (participant: IUser) => participant._id !== user._id
   );
 
   if (!receiver) {

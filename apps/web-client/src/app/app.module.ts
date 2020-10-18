@@ -3,10 +3,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { CoreModule } from './core/core.module';
+import { AuthGuard } from './core/guards/auth.guard';
 import { AppComponent } from './app.component';
-import { ChatsModule } from './chats/chats.module';
-import { ChatModule } from './chat/chat.module';
-import { HeaderModule } from './header/header.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +16,7 @@ import { HeaderModule } from './header/header.module';
           path: '',
           loadChildren: () =>
             import('./home/home.module').then((m) => m.HomeModule),
+          canActivate: [AuthGuard],
         },
         {
           path: 'login',

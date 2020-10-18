@@ -1,6 +1,9 @@
 <div class="mx-auto bg-white shadow-lg" style="width: 1200px; height: 732px;">
   <header class="border-black border-b-2" style="height: 72px;">
-    <wc-header [receiver]="receiver$ | async"></wc-header>
+    <wc-header
+      [receiver]="receiver$ | async"
+      [currentUser]="currentUser$ | async"
+    ></wc-header>
   </header>
 
   <div class="flex" style="height: 660px;">
@@ -15,7 +18,7 @@
       <wc-chat
         *ngIf="chat$ | async as chat"
         [chat]="chat"
-        [currentUserId]="currentUserId"
+        [currentUser]="currentUser$ | async"
         (sendMessage)="onSendMessage($event.chatId, $event.body)"
       ></wc-chat>
     </main>

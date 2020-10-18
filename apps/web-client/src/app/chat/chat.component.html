@@ -7,15 +7,15 @@
       *ngFor="let message of chat?.messages; let last = last"
       class="w-full flex justify-start"
       [ngClass]="{
-        'justify-start': message.authorId !== currentUserId,
-        'justify-end': message.authorId === currentUserId
+        'justify-start': message.authorId !== currentUser?._id,
+        'justify-end': message.authorId === currentUser?._id
       }"
     >
       <div
         class="p-2 inline-block shadow-lg mt-4 rounded-md"
         [ngClass]="{
-          'bg-white': message.authorId !== currentUserId,
-          'bg-green-400': message.authorId === currentUserId,
+          'bg-white': message.authorId !== currentUser?._id,
+          'bg-green-400': message.authorId === currentUser?._id,
           'mb-4': last
         }"
         style="min-width: 80px; max-width: 400px;"
