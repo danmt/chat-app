@@ -3,7 +3,9 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -13,16 +15,22 @@ import { IChat, IUser } from '@chat-app/api-interface';
   selector: 'wc-chat',
   templateUrl: './chat.component.html',
 })
-export class ChatComponent {
+export class ChatComponent implements OnChanges {
   @Input() currentUser!: IUser | null;
   @Input() chat!: IChat | null;
   @Output() sendMessage = new EventEmitter<{ chatId: string; body: string }>();
+  @ViewChild('chatInput') chatInput!: ElementRef<any>;
   chatGroup = this.fb.group({
     body: ['', [Validators.required]],
   });
-  @ViewChild('chatInput') chatInput!: ElementRef<any>;
 
   constructor(private fb: FormBuilder) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes.chat) {
+      this.chatGroup.reset();
+    }
+  }
 
   onSendMessage(chatId?: string) {
     if (this.chatGroup.invalid || !chatId) {
