@@ -2,10 +2,11 @@
   <div
     class="px-4 border-gray-400 border-b-2 bg-teal-200"
     style="height: 600px; overflow-y: auto;"
+    #chatContainer
   >
     <div
       *ngFor="let message of chat?.messages; let last = last"
-      class="w-full flex justify-start"
+      class="w-full flex justify-start flex-wrap"
       [ngClass]="{
         'justify-start': message.authorId !== currentUser?._id,
         'justify-end': message.authorId === currentUser?._id
@@ -15,8 +16,7 @@
         class="p-2 inline-block shadow-lg mt-4 rounded-md"
         [ngClass]="{
           'bg-white': message.authorId !== currentUser?._id,
-          'bg-green-400': message.authorId === currentUser?._id,
-          'mb-4': last
+          'bg-green-400': message.authorId === currentUser?._id
         }"
         style="min-width: 80px; max-width: 400px;"
       >
@@ -27,6 +27,8 @@
           {{ message.date | date: 'HH:MM' }}
         </p>
       </div>
+
+      <div *ngIf="last" class="p-2 block w-full h-4" wcAutoScroll></div>
     </div>
   </div>
   <form
