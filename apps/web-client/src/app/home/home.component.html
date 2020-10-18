@@ -10,6 +10,7 @@
     <aside class="h-full border-r-2 inline-block" style="width: 400px;">
       <wc-chats
         [chats]="chats$ | async"
+        [activeChatId]="activeChatId$ | async"
         (activateChat)="onActivateChat($event)"
       ></wc-chats>
     </aside>

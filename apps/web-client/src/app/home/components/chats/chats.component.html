@@ -1,6 +1,7 @@
 <article
   *ngFor="let chat of chats"
   class="w-full flex border-b-2 border-gray-400"
+  [ngClass]="{ 'bg-blue-300': activeChatId === chat._id }"
   style="height: 72px; padding: 10px;"
   (click)="onActivateChat(chat._id)"
 >

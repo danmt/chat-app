@@ -7,6 +7,7 @@ import { IChatTab } from '@chat-app/api-interface';
 })
 export class ChatsComponent {
   @Input() chats!: IChatTab[] | null;
+  @Input() activeChatId = '';
   @Output() activateChat = new EventEmitter<string>();
 
   onActivateChat(chatId: string) {

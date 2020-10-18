@@ -13,6 +13,7 @@ import { HomePageActions } from './actions';
 export class HomeComponent implements OnInit {
   currentUser$ = this.store.select(fromApp.selectAuth);
   chats$ = this.store.select(fromApp.selectChatsList);
+  activeChatId$ = this.store.select(fromApp.selectChatsActiveId);
   chat$ = this.store.select(fromApp.selectChat);
   receiver$ = this.store.select(fromApp.selectChatReceiver);
 
