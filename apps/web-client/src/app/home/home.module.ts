@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
+import { SharedModule } from '../shared/shared.module';
 import { HomeComponent } from './home.component';
-import { ChatsModule } from '../chats/chats.module';
-import { ChatModule } from '../chat/chat.module';
-import { HeaderModule } from '../header/header.module';
+import { ChatComponent } from './components/chat/chat.component';
+import { ChatsComponent } from './components/chats/chats.component';
+import { HeaderComponent } from './components/header/header.component';
 
 const routes: Routes = [{ path: '', component: HomeComponent }];
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, ChatComponent, ChatsComponent, HeaderComponent],
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule.forChild(routes),
-    ChatsModule,
-    ChatModule,
-    HeaderModule,
+    ReactiveFormsModule,
   ],
 })
 export class HomeModule {}
