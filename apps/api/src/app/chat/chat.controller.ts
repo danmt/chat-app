@@ -13,7 +13,7 @@ export class ChatController {
   }
 
   @Get()
-  getChats(@Headers('username') username: string) {
-    return this.chatService.getChats(username);
+  getChats(@Headers('id') id: string) {
+    return this.chatService.getChats(id);
   }
 }

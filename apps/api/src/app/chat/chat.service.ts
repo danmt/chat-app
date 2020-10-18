@@ -12,7 +12,7 @@ export class ChatService {
     return this.chatModel.create({ participants, messages: [] });
   }
 
-  async getChats(username: string) {
-    return this.chatModel.find({ 'participants.username': username });
+  async getChats(id: string) {
+    return this.chatModel.find({ 'participants._id': id });
   }
 }

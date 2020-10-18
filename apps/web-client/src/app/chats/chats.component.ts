@@ -7,9 +7,9 @@ import { IChatTab } from '@chat-app/api-interface';
 })
 export class ChatsComponent {
   @Input() chats!: IChatTab[] | null;
-  @Output() activateChat = new EventEmitter<number>();
+  @Output() activateChat = new EventEmitter<string>();
 
-  onActivateChat(chatId: number) {
+  onActivateChat(chatId: string) {
     this.activateChat.emit(chatId);
   }
 }

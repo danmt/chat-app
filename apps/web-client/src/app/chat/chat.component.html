@@ -7,15 +7,15 @@
       *ngFor="let message of chat?.messages; let last = last"
       class="w-full flex justify-start"
       [ngClass]="{
-        'justify-start': message.authorId !== currentId,
-        'justify-end': message.authorId === currentId
+        'justify-start': message.authorId !== currentUserId,
+        'justify-end': message.authorId === currentUserId
       }"
     >
       <div
         class="p-2 inline-block shadow-lg mt-4 rounded-md"
         [ngClass]="{
-          'bg-white': message.authorId !== currentId,
-          'bg-green-400': message.authorId === currentId,
+          'bg-white': message.authorId !== currentUserId,
+          'bg-green-400': message.authorId === currentUserId,
           'mb-4': last
         }"
         style="min-width: 80px; max-width: 400px;"
@@ -29,12 +29,17 @@
       </div>
     </div>
   </div>
-  <div style="height: 60px;">
+  <form
+    style="height: 60px;"
+    [formGroup]="chatGroup"
+    (ngSubmit)="onSendMessage(chat?._id)"
+  >
     <input
       class="h-full w-10/12 px-4"
       type="text"
       placeholder="Write a message here"
+      formControlName="body"
     />
-    <button class="h-full w-1/6">Send</button>
-  </div>
+    <button class="h-full w-1/6" type="submit">Send</button>
+  </form>
 </div>

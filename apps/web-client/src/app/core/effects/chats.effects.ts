@@ -1,106 +1,49 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { map } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 
-import { ChatsComponentActions, ChatsApiActions } from '../../chats/actions';
+import { HomePageActions, ChatsApiActions } from '../../home/actions';
+import { ApiService } from '../services/api.service';
 
 @Injectable()
 export class ChatsEffects {
   getChats$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(ChatsComponentActions.getChats),
-      map(() =>
-        ChatsApiActions.getChatsSuccess({
-          chats: [
-            {
-              id: 1,
-              participants: [
-                {
-                  id: 1,
-                  name: 'Daniel Marin',
-                  thumbnail: 'asd.jpg',
-                },
-                {
-                  id: 2,
-                  name: 'Juanita',
-                  thumbnail: 'asd.jpg',
-                },
-              ],
-              messages: [
-                {
-                  body: 'Hola',
-                  date: new Date(Date.now()),
-                  authorId: 2,
-                },
-                {
-                  body: 'Como estas?',
-                  date: new Date(Date.now()),
-                  authorId: 2,
-                },
-                {
-                  body: 'Todo bien y tu?',
-                  date: new Date(Date.now()),
-                  authorId: 1,
-                },
-                {
-                  body: 'Aqui...',
-                  date: new Date(Date.now()),
-                  authorId: 2,
-                },
-                {
-                  body: 'Y eso?',
-                  date: new Date(Date.now()),
-                  authorId: 1,
-                },
-                {
-                  body: 'Acabo de recordar....',
-                  date: new Date(Date.now()),
-                  authorId: 1,
-                },
-                {
-                  body: 'BOOOOOOOOOOOOORING',
-                  date: new Date(Date.now()),
-                  authorId: 1,
-                },
-                {
-                  body: 'Que bicho',
-                  date: new Date(Date.now()),
-                  authorId: 2,
-                },
-                {
-                  body: 'Llora puessssss',
-                  date: new Date(Date.now()),
-                  authorId: 1,
-                },
-              ],
-            },
-            {
-              id: 2,
-              participants: [
-                {
-                  id: 1,
-                  name: 'Daniel Marin',
-                  thumbnail: 'asd.jpg',
-                },
-                {
-                  id: 2,
-                  name: 'John Smith',
-                  thumbnail: 'asd.jpg',
-                },
-              ],
-              messages: [
-                {
-                  body: 'asd asdas dasdasd asdasd asdasdasda',
-                  date: new Date(Date.now()),
-                  authorId: 2,
-                },
-              ],
-            },
-          ],
-        })
+      ofType(HomePageActions.enterPage),
+      mergeMap(() =>
+        this.apiService
+          .getChats()
+          .pipe(map((chats) => ChatsApiActions.getChatsSuccess({ chats })))
       )
     )
   );
 
-  constructor(private actions$: Actions) {}
+  activateChat$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.activateChat),
+        tap(({ chatId }) =>
+          this.router.navigate([''], { queryParams: { chatId } })
+        )
+      ),
+    { dispatch: false }
+  );
+
+  sendMessage$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.sendMessage),
+        mergeMap(({ chatId, body }) =>
+          this.apiService.sendMessage(chatId, body)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  constructor(
+    private actions$: Actions,
+    private apiService: ApiService,
+    private router: Router
+  ) {}
 }

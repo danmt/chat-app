@@ -2,7 +2,7 @@
   *ngFor="let chat of chats"
   class="w-full flex border-b-2 border-gray-400"
   style="height: 72px; padding: 10px;"
-  (click)="onActivateChat(chat.id)"
+  (click)="onActivateChat(chat._id)"
 >
   <figure
     class="rounded-full border-black border-2 overflow-hidden"
@@ -16,7 +16,7 @@
   </figure>
   <div style="width: 230px;" class="pl-4">
     <h2 class="text-base font-bold truncate">
-      {{ chat?.contact?.name }}
+      {{ chat?.contact?.username }}
     </h2>
     <p class="text-sm text-gray-700 truncate">{{ chat?.lastMessage?.body }}</p>
   </div>

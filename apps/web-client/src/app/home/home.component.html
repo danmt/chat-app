@@ -15,7 +15,8 @@
       <wc-chat
         *ngIf="chat$ | async as chat"
         [chat]="chat"
-        [currentId]="1"
+        [currentUserId]="currentUserId"
+        (sendMessage)="onSendMessage($event.chatId, $event.body)"
       ></wc-chat>
     </main>
   </div>

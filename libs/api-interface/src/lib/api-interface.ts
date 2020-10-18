@@ -1,23 +1,23 @@
 export interface IMessage {
   body: string;
   date: Date;
-  authorId: number;
+  authorId: string;
 }
 
 export interface IUser {
-  id: number;
-  name: string;
+  _id: string;
+  username: string;
   thumbnail: string;
 }
 
 export interface IChat {
-  id: number;
+  _id: string;
   participants: [IUser, IUser];
   messages: IMessage[];
 }
 
 export interface IChatTab {
-  id: number;
+  _id: string;
   contact?: IUser;
   lastMessage?: IMessage;
 }
