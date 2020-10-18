@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { IChat, IUser } from '@chat-app/api-interface';
 
@@ -13,6 +20,7 @@ export class ChatComponent {
   chatGroup = this.fb.group({
     body: ['', [Validators.required]],
   });
+  @ViewChild('chatInput') chatInput!: ElementRef<any>;
 
   constructor(private fb: FormBuilder) {}
 
@@ -24,6 +32,7 @@ export class ChatComponent {
     const { body } = this.chatGroup.value;
 
     this.sendMessage.emit({ chatId, body });
+    this.chatInput.nativeElement.focus();
     this.chatGroup.reset();
   }
 }
