@@ -7,13 +7,14 @@ export interface State {
   data: IChat[] | null;
   pending: boolean;
   error: Error | null;
-  activeId?: string;
+  activeId: string | null;
 }
 
 export const initialState = {
   data: null,
   pending: false,
   error: null,
+  activeId: null,
 } as State;
 
 const chatReducer = createReducer(
@@ -75,7 +76,7 @@ export const selectChatsList = (chats: IChat[] | null, user: IUser | null) => {
 };
 export const selectChatsPending = (state: State) => state.pending;
 export const selectChatsError = (state: State) => state.error;
-export const selectChat = (chats: IChat[] | null, activeId?: string) => {
+export const selectChat = (chats: IChat[] | null, activeId: string | null) => {
   if (!chats || !activeId) {
     return null;
   }
