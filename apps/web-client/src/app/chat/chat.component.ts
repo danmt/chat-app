@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { IChat, IUser } from '@chat-app/api-interface';
 
@@ -17,7 +10,6 @@ export class ChatComponent {
   @Input() currentUser!: IUser | null;
   @Input() chat!: IChat | null;
   @Output() sendMessage = new EventEmitter<{ chatId: string; body: string }>();
-  @ViewChild('chatContainer') chatContainer!: ElementRef<any>;
   chatGroup = this.fb.group({
     body: ['', [Validators.required]],
   });
