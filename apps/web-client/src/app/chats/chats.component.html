@@ -4,16 +4,7 @@
   style="height: 72px; padding: 10px;"
   (click)="onActivateChat(chat._id)"
 >
-  <figure
-    class="rounded-full border-black border-2 overflow-hidden"
-    style="width: 50px; height: 50px;"
-  >
-    <img
-      src="assets/img/avatar.webp"
-      alt=""
-      class="w-full h-full object-cover"
-    />
-  </figure>
+  <wc-thumbnail [url]="chat?.contact?.thumbnail || null"></wc-thumbnail>
   <div style="width: 230px;" class="pl-4">
     <h2 class="text-base font-bold truncate">
       {{ chat?.contact?.username }}
