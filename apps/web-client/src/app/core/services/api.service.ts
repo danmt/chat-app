@@ -19,4 +19,8 @@ export class ApiService {
   login(username: string) {
     return this.httpClient.post<IUser>('/api/users/login', { username });
   }
+
+  startChat(participants: [IUser, IUser]) {
+    return this.httpClient.post<IChat>('/api/chats', { participants });
+  }
 }

@@ -2,9 +2,16 @@
   <div style="width: 400px;" class="h-full border-gray-400 border-r-2">
     <div class="flex items-center" style="padding: 10px;">
       <wc-thumbnail [url]="currentUser?.thumbnail || null"></wc-thumbnail>
-      <h2 style="width: 330px;" class="text-2xl pl-4">
+      <h2 style="width: 300px;" class="text-2xl pl-4">
         {{ currentUser?.username }}
       </h2>
+      <button
+        *ngIf="hasReceivers"
+        style="width: 30px;"
+        (click)="onToggleShowClients()"
+      >
+        {{ isShowingClients ? '-' : '+' }}
+      </button>
     </div>
   </div>
 

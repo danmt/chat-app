@@ -2,6 +2,7 @@ export interface IMessage {
   body: string;
   date: Date;
   authorId: string;
+  chatId: string;
 }
 
 export interface IUser {
@@ -9,6 +10,7 @@ export interface IUser {
   username: string;
   thumbnail: string;
   clientId?: string;
+  isLoggedIn: boolean | null;
 }
 
 export interface IChat {
@@ -19,8 +21,8 @@ export interface IChat {
 
 export interface IChatTab {
   _id: string;
-  contact?: IUser;
-  lastMessage?: IMessage;
+  contact: IUser | null;
+  lastMessage: IMessage | null;
 }
 
 export enum ActionTypes {

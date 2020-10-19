@@ -1,14 +1,27 @@
 <article
   *ngFor="let chat of chats"
   class="w-full flex border-b-2 border-gray-400"
-  [ngClass]="{ 'bg-blue-300': activeChatId === chat._id }"
+  [ngClass]="{
+    'bg-blue-300': activeChatId === chat._id
+  }"
   style="height: 72px; padding: 10px;"
   (click)="onActivateChat(chat._id)"
 >
   <wc-thumbnail [url]="chat?.contact?.thumbnail || null"></wc-thumbnail>
   <div style="width: 230px;" class="pl-4">
-    <h2 class="text-base font-bold truncate">
+    <h2 class="text-base font-bold truncate flex items-center">
       {{ chat?.contact?.username }}
+
+      <span
+        *ngIf="chat?.contact?.isLoggedIn"
+        class="rounded-full w-2 h-2 ml-2 inline-block bg-green-500"
+        aria-label="is online"
+      ></span>
+      <span
+        *ngIf="!chat?.contact?.isLoggedIn"
+        class="rounded-full w-2 h-2 ml-2 inline-block bg-red-600"
+        aria-label="is offline"
+      ></span>
     </h2>
     <p class="text-sm text-gray-700 truncate">{{ chat?.lastMessage?.body }}</p>
   </div>

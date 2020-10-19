@@ -41,6 +41,28 @@ export class ChatsEffects {
     )
   );
 
+  startChat$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HomePageActions.startChat),
+      mergeMap(({ participants }) =>
+        this.apiService
+          .startChat(participants)
+          .pipe(map((chat) => ChatsApiActions.startChatSuccess({ chat })))
+      )
+    )
+  );
+
+  startChatSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ChatsApiActions.startChatSuccess),
+        tap(({ chat }) =>
+          this.router.navigate([''], { queryParams: { chatId: chat._id } })
+        )
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private actions$: Actions,
     private apiService: ApiService,

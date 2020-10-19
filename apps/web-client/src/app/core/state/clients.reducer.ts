@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import { IUser } from '@chat-app/api-interface';
+import { IChat, IUser } from '@chat-app/api-interface';
 
 import { ChatsSocketActions } from '../../home/actions';
 
@@ -32,3 +32,34 @@ export function reducer(state = initialState, action: Action) {
 export const selectClientsData = (state: State) => state.data;
 export const selectClientsPending = (state: State) => state.pending;
 export const selectClientsError = (state: State) => state.error;
+
+// TAKE OUT CLIENTS WHERE CHAT ALREADY EXISTS
+
+export const selectClientsReceivers = (
+  clients: IUser[] | null,
+  chats: IChat[] | null,
+  currentUser: IUser | null
+) => {
+  if (!clients || !currentUser || !chats) {
+    return null;
+  }
+
+  return clients.filter(
+    (client) =>
+      // Hide the current user
+      client._id !== currentUser._id &&
+      // Hide clients that already have an open chat with current user
+      !chats.some(
+        (chat) =>
+          chat.participants.some(
+            (participant) => participant._id === client._id
+          ) &&
+          chat.participants.some(
+            (participant) => participant._id === currentUser._id
+          )
+      )
+  );
+};
+
+export const selectClientsHasReceivers = (clients: IUser[] | null) =>
+  clients && !!clients.length;

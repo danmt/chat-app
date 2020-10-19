@@ -1,0 +1,13 @@
+<article
+  *ngFor="let client of clients"
+  class="w-full flex border-b-2 border-gray-400"
+  style="height: 72px; padding: 10px;"
+  (click)="onStartChat(client)"
+>
+  <wc-thumbnail [url]="client?.thumbnail || null"></wc-thumbnail>
+  <div style="width: 230px;" class="pl-4">
+    <h2 class="text-base font-bold truncate">
+      {{ client?.username }}
+    </h2>
+  </div>
+</article>

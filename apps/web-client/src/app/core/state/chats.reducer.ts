@@ -43,11 +43,31 @@ const chatsReducer = createReducer(
     ...state,
     data: !state.data
       ? null
-      : state.data.map((chat) => ({
-          ...chat,
-          messages: [...chat.messages, action.message],
-        })),
-  }))
+      : state.data.map((chat) =>
+          chat._id === action.message.chatId
+            ? {
+                ...chat,
+                messages: [...chat.messages, action.message],
+              }
+            : chat
+        ),
+  })),
+  on(ChatsApiActions.startChatSuccess, (state, action) => {
+    if (!state.data) {
+      return state;
+    }
+
+    const chatFound = state.data.find((chat) => chat._id === action.chat._id);
+
+    if (chatFound) {
+      return state;
+    }
+
+    return {
+      ...state,
+      data: [...state.data, action.chat],
+    };
+  })
 );
 
 export function reducer(state = initialState, action: Action) {
@@ -56,21 +76,33 @@ export function reducer(state = initialState, action: Action) {
 
 export const selectChatsData = (state: State) => state.data;
 export const selectChatsActiveId = (state: State) => state.activeId;
-export const selectChatsList = (chats: IChat[] | null, user: IUser | null) => {
-  if (!chats || !user) {
+export const selectChatsList = (
+  chats: IChat[] | null,
+  clients: IUser[] | null,
+  currentUser: IUser | null
+) => {
+  if (!chats || !clients || !currentUser) {
     return null;
   }
+
+  console.log(chats);
 
   return chats.map(
     (chat) =>
       ({
         _id: chat._id,
-        contact: chat.participants.find(
-          (participant: IUser) => user._id !== participant._id
-        ),
-        lastMessage: chat.messages.find(
-          (message: IMessage) => user._id !== message.authorId
-        ),
+        lastMessage: chat.messages?.reduceRight((message) => message),
+        contact: chat.participants
+          .filter((participant) => currentUser?._id !== participant._id)
+          .reduce(
+            (_: IUser | null, participant) => ({
+              ...participant,
+              isLoggedIn:
+                clients?.some((client) => client._id === participant._id) ||
+                false,
+            }),
+            null
+          ),
       } as IChatTab)
   );
 };
@@ -81,7 +113,7 @@ export const selectChat = (chats: IChat[] | null, activeId: string | null) => {
     return null;
   }
 
-  const selectedChat = chats.find((chat: IChat) => chat._id === activeId);
+  const selectedChat = chats.find((chat) => chat._id === activeId);
 
   if (!selectedChat) {
     return null;
@@ -95,7 +127,7 @@ export const selectChatReceiver = (chat: IChat | null, user: IUser | null) => {
   }
 
   const receiver = chat.participants.find(
-    (participant: IUser) => participant._id !== user._id
+    (participant) => participant._id !== user._id
   );
 
   if (!receiver) {
