@@ -85,13 +85,14 @@ export const selectChatsList = (
     return null;
   }
 
-  console.log(chats);
-
   return chats.map(
     (chat) =>
       ({
         _id: chat._id,
-        lastMessage: chat.messages?.reduceRight((message) => message),
+        lastMessage: chat.messages?.reduce(
+          (_: IMessage | null, message) => message,
+          null
+        ),
         contact: chat.participants
           .filter((participant) => currentUser?._id !== participant._id)
           .reduce(
