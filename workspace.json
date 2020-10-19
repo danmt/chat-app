@@ -201,6 +201,56 @@
           }
         }
       }
+    },
+    "socket": {
+      "root": "apps/socket",
+      "sourceRoot": "apps/socket/src",
+      "projectType": "application",
+      "prefix": "socket",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/socket",
+            "main": "apps/socket/src/main.ts",
+            "tsConfig": "apps/socket/tsconfig.app.json",
+            "assets": ["apps/socket/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/socket/src/environments/environment.ts",
+                  "with": "apps/socket/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "socket:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/socket/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/socket/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

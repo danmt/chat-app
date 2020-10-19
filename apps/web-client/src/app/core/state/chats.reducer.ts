@@ -17,7 +17,7 @@ export const initialState = {
   activeId: null,
 } as State;
 
-const chatReducer = createReducer(
+const chatsReducer = createReducer(
   initialState,
   on(HomePageActions.enterPage, (state) => ({
     ...state,
@@ -51,7 +51,7 @@ const chatReducer = createReducer(
 );
 
 export function reducer(state = initialState, action: Action) {
-  return chatReducer(state, action);
+  return chatsReducer(state, action);
 }
 
 export const selectChatsData = (state: State) => state.data;
