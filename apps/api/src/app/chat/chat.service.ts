@@ -9,6 +9,14 @@ export class ChatService {
   constructor(@InjectModel(Chat.name) private chatModel: Model<ChatDocument>) {}
 
   async create(participants: IUser[]) {
+    const chat = await this.chatModel.findOne({
+      participants: { $all: participants },
+    });
+
+    if (chat) {
+      return chat;
+    }
+
     return this.chatModel.create({ participants, messages: [] });
   }
 
