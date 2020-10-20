@@ -47,7 +47,7 @@ const chatsReducer = createReducer(
     error: action.error,
     data: null,
   })),
-  on(ChatsApiActions.messageSent, (state, action) => ({
+  on(ChatsSocketActions.messageSent, (state, action) => ({
     ...state,
     data: !state.data
       ? null

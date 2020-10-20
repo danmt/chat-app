@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Headers,
-  Param,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Post, Body, Param, HttpCode } from '@nestjs/common';
 
 import { MessageService } from './message.service';
 
@@ -17,9 +10,12 @@ export class MessageController {
   @HttpCode(200)
   sendMessage(
     @Param('chat_id') chatId: string,
-    @Headers('id') authorId: string,
-    @Body('body') body: string
+    @Body('body') body: string,
+    @Body('authorId') authorId: string
   ) {
+    console.log('chatId', chatId);
+    console.log('body', body);
+    console.log('authorId', authorId);
     return this.messageService.sendMessage(chatId, authorId, body);
   }
 }

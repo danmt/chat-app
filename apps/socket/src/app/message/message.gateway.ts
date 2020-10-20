@@ -8,7 +8,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { HttpService, Logger } from '@nestjs/common';
 
-import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
+import { ActionTypes, IChat, IMessage, IUser } from '@chat-app/api-interface';
 
 @WebSocketGateway()
 export class MessageGateway {
@@ -82,5 +82,26 @@ export class MessageGateway {
       .subscribe(({ data }) =>
         this.server.to(data.chatId).emit(ActionTypes.ChatDeleted, data)
       );
+  }
+
+  @SubscribeMessage(ActionTypes.SendMessage)
+  sendMessage(
+    @MessageBody() payload: { authorId: string; chatId: string; body: string }
+  ) {
+    this.logger.log(`Send Message to chat ${payload.chatId}`);
+
+    console.log(payload);
+
+    this.httpService
+      .post<IMessage>(
+        `http://localhost:3333/api/chats/${payload.chatId}/messages`,
+        { authorId: payload.authorId, body: payload.body }
+      )
+      .subscribe(({ data: message }) => {
+        console.log(message);
+        this.server
+          .to(payload.chatId)
+          .emit(ActionTypes.MessageSent, { message });
+      });
   }
 }

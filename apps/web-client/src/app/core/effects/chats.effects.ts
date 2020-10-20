@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionTypes, IChat } from '@chat-app/api-interface';
+import { ActionTypes, IChat, IMessage } from '@chat-app/api-interface';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Socket } from 'ngx-socket-io';
 import { map, mergeMap, tap } from 'rxjs/operators';
@@ -53,17 +53,6 @@ export class ChatsEffects {
     { dispatch: false }
   );
 
-  sendMessage$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(HomePageActions.sendMessage),
-      mergeMap(({ chatId, body }) =>
-        this.apiService
-          .sendMessage(chatId, body)
-          .pipe(map((message) => ChatsApiActions.messageSent({ message })))
-      )
-    )
-  );
-
   startChat$ = createEffect(
     () =>
       this.actions$.pipe(
@@ -109,6 +98,25 @@ export class ChatsEffects {
       ),
       map(({ chatId }) => ChatsSocketActions.chatDeleted({ chatId }))
     )
+  );
+
+  sendMessage$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.sendMessage),
+        tap(({ authorId, chatId, body }) =>
+          this.socket.emit(ActionTypes.SendMessage, { authorId, chatId, body })
+        )
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
+  messageSent$ = createEffect(() =>
+    this.socket
+      .fromEvent<{ message: IMessage }>(ActionTypes.MessageSent)
+      .pipe(map(({ message }) => ChatsSocketActions.messageSent({ message })))
   );
 
   constructor(
