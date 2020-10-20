@@ -5,7 +5,9 @@
       [currentUser]="currentUser$ | async"
       [isShowingClients]="isShowingClients$ | async"
       [hasReceivers]="hasReceivers$ | async"
+      [activeChatId]="activeChatId$ | async"
       (toggleShowClients)="onToggleShowClients($event)"
+      (deleteChat)="onDeleteChat($event)"
     ></wc-header>
   </header>
 

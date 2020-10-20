@@ -23,4 +23,8 @@ export class ApiService {
   startChat(participants: [IUser, IUser]) {
     return this.httpClient.post<IChat>('/api/chats', { participants });
   }
+
+  deleteChat(chatId: string) {
+    return this.httpClient.delete<string>(`/api/chats/${chatId}`);
+  }
 }

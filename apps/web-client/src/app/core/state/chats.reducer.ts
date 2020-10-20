@@ -27,6 +27,10 @@ const chatsReducer = createReducer(
     ...state,
     activeId: action.chatId,
   })),
+  on(HomePageActions.clearChat, (state, action) => ({
+    ...state,
+    activeId: null,
+  })),
   on(ChatsApiActions.getChatsSuccess, (state, action) => ({
     ...state,
     pending: false,
@@ -66,6 +70,16 @@ const chatsReducer = createReducer(
     return {
       ...state,
       data: [...state.data, action.chat],
+    };
+  }),
+  on(ChatsApiActions.deleteChatSuccess, (state, action) => {
+    if (!state.data) {
+      return state;
+    }
+
+    return {
+      ...state,
+      data: state.data.filter((chat) => chat._id !== action.chatId),
     };
   })
 );

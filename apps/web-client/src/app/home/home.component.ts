@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IUser } from '@chat-app/api-interface';
 import { Store } from '@ngrx/store';
-import { filter, map, take, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
+import { IUser } from '@chat-app/api-interface';
 import * as fromApp from '../core/state';
 import { HomePageActions } from './actions';
 
@@ -15,9 +15,7 @@ export class HomeComponent implements OnInit {
   currentUser$ = this.store.select(fromApp.selectAuth);
   clients$ = this.store.select(fromApp.selectClientsReceivers);
   hasReceivers$ = this.store.select(fromApp.selectClientsHasReceivers);
-  chats$ = this.store
-    .select(fromApp.selectChatsList)
-    .pipe(tap((a) => console.log(a)));
+  chats$ = this.store.select(fromApp.selectChatsList);
   activeChatId$ = this.store.select(fromApp.selectChatsActiveId);
   chat$ = this.store.select(fromApp.selectChat);
   receiver$ = this.store.select(fromApp.selectChatReceiver);
@@ -37,16 +35,21 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(HomePageActions.enterPage());
 
-    this.route.queryParams
-      .pipe(filter((queryParams) => queryParams && queryParams.chatId))
-      .subscribe(({ chatId }) => {
-        this.onToggleShowClients(true);
+    this.route.queryParams.subscribe(({ chatId }) => {
+      if (chatId) {
         this.onActivateChat(chatId);
-      });
+      } else {
+        this.onClearChat();
+      }
+    });
   }
 
   onActivateChat(chatId: string) {
     this.store.dispatch(HomePageActions.activateChat({ chatId }));
+  }
+
+  onClearChat() {
+    this.store.dispatch(HomePageActions.clearChat());
   }
 
   onSendMessage(chatId: string, body: string) {
@@ -54,12 +57,17 @@ export class HomeComponent implements OnInit {
   }
 
   onToggleShowClients(previousValue: boolean | undefined) {
-    this.router.navigate(['/'], {
+    this.router.navigate([''], {
       queryParams: { isShowingClients: previousValue ? undefined : true },
+      queryParamsHandling: 'merge',
     });
   }
 
   onStartChat(participants: [IUser, IUser]) {
     this.store.dispatch(HomePageActions.startChat({ participants }));
+  }
+
+  onDeleteChat(chatId: string) {
+    this.store.dispatch(HomePageActions.deleteChat({ chatId }));
   }
 }

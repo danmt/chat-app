@@ -24,7 +24,24 @@ export class ChatsEffects {
       this.actions$.pipe(
         ofType(HomePageActions.activateChat),
         tap(({ chatId }) =>
-          this.router.navigate([''], { queryParams: { chatId } })
+          this.router.navigate([''], {
+            queryParams: { chatId },
+            queryParamsHandling: 'merge',
+          })
+        )
+      ),
+    { dispatch: false }
+  );
+
+  clearChat$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.clearChat),
+        map(() =>
+          this.router.navigate([''], {
+            queryParams: { chatId: undefined },
+            queryParamsHandling: 'merge',
+          })
         )
       ),
     { dispatch: false }
@@ -61,6 +78,17 @@ export class ChatsEffects {
         )
       ),
     { dispatch: false }
+  );
+
+  deleteChat$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HomePageActions.deleteChat),
+      mergeMap(({ chatId }) =>
+        this.apiService
+          .deleteChat(chatId)
+          .pipe(map(() => ChatsApiActions.deleteChatSuccess({ chatId })))
+      )
+    )
   );
 
   constructor(

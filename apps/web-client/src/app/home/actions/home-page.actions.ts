@@ -15,3 +15,7 @@ export const startChat = createAction(
   '[HomePage] Start Chat',
   props<{ participants: [IUser, IUser] }>()
 );
+export const deleteChat = createAction(
+  '[HomePage] Delete Chat',
+  props<{ chatId: string }>()
+);
