@@ -12,7 +12,7 @@ import { HomePageActions } from './actions';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
-  currentUser$ = this.store.select(fromApp.selectAuth);
+  currentUser$ = this.store.select(fromApp.selectCurrentClient);
   clients$ = this.store.select(fromApp.selectClientsReceivers);
   hasReceivers$ = this.store.select(fromApp.selectClientsHasReceivers);
   chats$ = this.store.select(fromApp.selectChatsList);

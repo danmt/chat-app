@@ -63,3 +63,14 @@ export const selectClientsReceivers = (
 
 export const selectClientsHasReceivers = (clients: IUser[] | null) =>
   clients && !!clients.length;
+
+export const selectCurrentClient = (
+  clients: IUser[] | null,
+  currentUser: IUser | null
+) => {
+  if (!clients || !currentUser) {
+    return null;
+  }
+
+  return clients.find((client) => client._id === currentUser._id) || null;
+};

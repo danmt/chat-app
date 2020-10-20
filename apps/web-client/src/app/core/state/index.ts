@@ -86,6 +86,11 @@ export const selectClientsHasReceivers = createSelector(
   selectClientsReceivers,
   fromClients.selectClientsHasReceivers
 );
+export const selectCurrentClient = createSelector(
+  selectClients,
+  selectAuth,
+  fromClients.selectCurrentClient
+);
 
 export const selectChatsList = createSelector(
   selectChats,

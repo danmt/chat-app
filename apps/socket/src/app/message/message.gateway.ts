@@ -6,16 +6,18 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger } from '@nestjs/common';
+import { HttpService, Logger } from '@nestjs/common';
 
-import { ActionTypes, IUser } from '@chat-app/api-interface';
+import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
 
 @WebSocketGateway()
 export class MessageGateway {
-  connectedClients = [];
+  connectedClients: IUser[] = [];
   @WebSocketServer()
   server: Server;
   private logger: Logger = new Logger('MessagesGateway');
+
+  constructor(private httpService: HttpService) {}
 
   handleDisconnect(client: Socket) {
     this.connectedClients = this.connectedClients.filter(
@@ -29,13 +31,44 @@ export class MessageGateway {
 
   @SubscribeMessage(ActionTypes.Connect)
   connect(@MessageBody() payload: IUser, @ConnectedSocket() client: Socket) {
+    this.logger.log(
+      `Connect: ${payload.username} (${payload._id}/${client.id}) - ${this.connectedClients.length} connected clients.`
+    );
+    // Update connected clients list
     this.connectedClients = [
       ...this.connectedClients,
       { ...payload, clientId: client.id },
     ];
+
+    this.httpService
+      .get<IChat[]>('http://localhost:3333/api/chats', {
+        headers: { id: payload._id },
+      })
+      .subscribe(({ data }) => {
+        // Join every chat room where the user is part of
+        data.forEach((chat) => client.join(chat._id));
+        // Emit to every client the full list of connected clients
+        this.server.emit(ActionTypes.ClientConnected, this.connectedClients);
+      });
+  }
+
+  @SubscribeMessage(ActionTypes.StartChat)
+  startChat(@MessageBody() payload: { participants: [IUser, IUser] }) {
     this.logger.log(
-      `Connect: ${payload.username} (${payload._id}/${client.id}) - ${this.connectedClients.length} connected clients.`
+      `Start Chat: Between ${payload.participants[0]._id} and ${payload.participants[1]._id}`
     );
-    this.server.emit(ActionTypes.ClientConnected, this.connectedClients);
+
+    this.httpService
+      .post<IChat>('http://localhost:3333/api/chats', payload)
+      .subscribe(({ data }) => {
+        // Add both participants to the chat room
+        payload.participants.forEach((participant) => {
+          const socket = this.server.sockets.connected[participant.clientId];
+          if (socket) {
+            socket.join(data._id);
+          }
+        });
+        this.server.to(data._id).emit(ActionTypes.ChatStarted, { chat: data });
+      });
   }
 }

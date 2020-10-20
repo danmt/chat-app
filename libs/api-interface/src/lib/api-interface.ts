@@ -29,6 +29,8 @@ export enum ActionTypes {
   Connect = '[Web Client] Connect',
   ClientConnected = '[Socket] Client Connected',
   ClientDisconnected = '[Socket] Client Disconnected',
+  StartChat = '[Web Client] Start Chat',
+  ChatStarted = '[Socket] Chat Started',
   SendMessage = '[Web Client] Send Message',
   MessageSent = '[Socket] Message Sent',
   MessageReceived = '[Socket] Message Received',
