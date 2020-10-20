@@ -65,14 +65,12 @@ const chatsReducer = createReducer(
       return state;
     }
 
-    console.log(action);
-
     return {
       ...state,
       data: [...state.data, action.chat],
     };
   }),
-  on(ChatsApiActions.deleteChatSuccess, (state, action) => {
+  on(ChatsSocketActions.chatDeleted, (state, action) => {
     if (!state.data) {
       return state;
     }

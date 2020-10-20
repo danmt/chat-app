@@ -44,9 +44,9 @@ export class MessageGateway {
       .get<IChat[]>('http://localhost:3333/api/chats', {
         headers: { id: payload._id },
       })
-      .subscribe(({ data }) => {
+      .subscribe(({ data: chats }) => {
         // Join every chat room where the user is part of
-        data.forEach((chat) => client.join(chat._id));
+        chats.forEach((chat) => client.join(chat._id));
         // Emit to every client the full list of connected clients
         this.server.emit(ActionTypes.ClientConnected, this.connectedClients);
       });
@@ -60,15 +60,27 @@ export class MessageGateway {
 
     this.httpService
       .post<IChat>('http://localhost:3333/api/chats', payload)
-      .subscribe(({ data }) => {
+      .subscribe(({ data: chat }) => {
         // Add both participants to the chat room
         payload.participants.forEach((participant) => {
           const socket = this.server.sockets.connected[participant.clientId];
           if (socket) {
-            socket.join(data._id);
+            socket.join(chat._id);
           }
         });
-        this.server.to(data._id).emit(ActionTypes.ChatStarted, { chat: data });
+        this.server.to(chat._id).emit(ActionTypes.ChatStarted, { chat });
       });
+  }
+
+  @SubscribeMessage(ActionTypes.DeleteChat)
+  deleteChat(@MessageBody() payload: { chatId: string }) {
+    this.logger.log(`Delete Chat ${payload.chatId}`);
+    this.httpService
+      .delete<{ chatId: string }>(
+        `http://localhost:3333/api/chats/${payload.chatId}`
+      )
+      .subscribe(({ data }) =>
+        this.server.to(data.chatId).emit(ActionTypes.ChatDeleted, data)
+      );
   }
 }

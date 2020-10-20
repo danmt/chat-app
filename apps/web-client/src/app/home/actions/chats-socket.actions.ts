@@ -5,8 +5,11 @@ export const clientConnected = createAction(
   '[ChatsSocket] Client Connected',
   props<{ clients: IUser[] }>()
 );
-
 export const chatStarted = createAction(
   '[ChatsSocket] Chat Started',
   props<{ chat: IChat }>()
+);
+export const chatDeleted = createAction(
+  '[ChatsSocket] Chat Deleted',
+  props<{ chatId: string }>()
 );
