@@ -13,9 +13,6 @@ export class MessageController {
     @Body('body') body: string,
     @Body('authorId') authorId: string
   ) {
-    console.log('chatId', chatId);
-    console.log('body', body);
-    console.log('authorId', authorId);
     return this.messageService.sendMessage(chatId, authorId, body);
   }
 }

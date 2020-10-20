@@ -89,19 +89,15 @@ export class MessageGateway {
     @MessageBody() payload: { authorId: string; chatId: string; body: string }
   ) {
     this.logger.log(`Send Message to chat ${payload.chatId}`);
-
-    console.log(payload);
-
     this.httpService
       .post<IMessage>(
         `http://localhost:3333/api/chats/${payload.chatId}/messages`,
         { authorId: payload.authorId, body: payload.body }
       )
-      .subscribe(({ data: message }) => {
-        console.log(message);
+      .subscribe(({ data: message }) =>
         this.server
           .to(payload.chatId)
-          .emit(ActionTypes.MessageSent, { message });
-      });
+          .emit(ActionTypes.MessageSent, { message })
+      );
   }
 }
