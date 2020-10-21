@@ -35,17 +35,21 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(HomePageActions.enterPage());
 
-    this.route.queryParams
-      .pipe(
-        map(({ chatId }) => chatId),
-        filter((chatId) => chatId),
-        take(1)
-      )
-      .subscribe((chatId) => this.onActivateChat(chatId));
+    this.route.queryParams.subscribe(({ chatId }) => {
+      if (chatId) {
+        this.onActivateChat(chatId);
+      } else {
+        this.onClearChat();
+      }
+    });
   }
 
   onActivateChat(chatId: string) {
     this.store.dispatch(HomePageActions.activateChat({ chatId }));
+  }
+
+  onClearChat() {
+    this.store.dispatch(HomePageActions.clearChat());
   }
 
   onSendMessage(chatId: string, body: string) {
