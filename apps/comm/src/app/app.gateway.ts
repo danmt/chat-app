@@ -58,4 +58,9 @@ export class AppGateway {
         this.server.to(chat._id).emit(ActionTypes.ChatStarted, { chat });
       });
   }
+
+  @SubscribeMessage(ActionTypes.DeleteChat)
+  deleteChat(@MessageBody() payload: { chatId: string }) {
+    this.logger.log(`Delete Chat ${payload.chatId}`);
+  }
 }
