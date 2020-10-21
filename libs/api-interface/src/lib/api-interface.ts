@@ -21,3 +21,8 @@ export interface IChatTab {
   contact?: IUser;
   lastMessage?: IMessage;
 }
+
+export enum ActionTypes {
+  Connect = '[Web Client] Connect',
+  ClientConnected = '[Socket] Client Connected',
+}
