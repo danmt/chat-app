@@ -12,7 +12,11 @@ export class ChatService {
     return this.chatModel.create({ participants, messages: [] });
   }
 
-  async getChats(id: string) {
-    return this.chatModel.find({ 'participants._id': id });
+  async getChats(currentUserId: string) {
+    return this.chatModel.find({ 'participants._id': currentUserId });
+  }
+
+  async deleteChat(chatId: string) {
+    return this.chatModel.deleteOne({ _id: chatId });
   }
 }

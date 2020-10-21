@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Headers, Get, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  Get,
+  HttpCode,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { IUser } from '@chat-app/api-interface';
 
 import { ChatService } from './chat.service';
@@ -16,5 +25,10 @@ export class ChatController {
   @Get()
   getChats(@Headers('id') id: string) {
     return this.chatService.getChats(id);
+  }
+
+  @Delete('/:chat_id')
+  deleteChat(@Param('chat_id') chatId: string) {
+    return this.chatService.deleteChat(chatId);
   }
 }
