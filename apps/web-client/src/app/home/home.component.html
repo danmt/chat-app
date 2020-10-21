@@ -21,6 +21,7 @@
         *ngIf="isShowingClients$ | async"
         [clients]="clients$ | async"
         [currentUser]="currentUser$ | async"
+        (startChat)="onStartChat($event)"
       ></wc-clients>
     </aside>
 

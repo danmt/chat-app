@@ -1,7 +1,11 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import { IChat, IMessage, IUser, IChatTab } from '@chat-app/api-interface';
 
-import { HomePageActions, ChatsApiActions } from '../../home/actions';
+import {
+  HomePageActions,
+  ChatsApiActions,
+  ChatsSocketActions,
+} from '../../home/actions';
 
 export interface State {
   data: IChat[] | null;
@@ -27,6 +31,10 @@ const chatReducer = createReducer(
     ...state,
     activeId: action.chatId,
   })),
+  on(HomePageActions.clearChat, (state) => ({
+    ...state,
+    activeId: null,
+  })),
   on(ChatsApiActions.getChatsSuccess, (state, action) => ({
     ...state,
     pending: false,
@@ -47,7 +55,17 @@ const chatReducer = createReducer(
           ...chat,
           messages: [...chat.messages, action.message],
         })),
-  }))
+  })),
+  on(ChatsSocketActions.chatStarted, (state, action) => {
+    if (!state.data) {
+      return state;
+    }
+
+    return {
+      ...state,
+      data: [...state.data, action.chat],
+    };
+  })
 );
 
 export function reducer(state = initialState, action: Action) {

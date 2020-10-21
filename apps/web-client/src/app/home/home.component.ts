@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IUser } from '@chat-app/api-interface';
 import { Store } from '@ngrx/store';
 import { filter, map, take } from 'rxjs/operators';
 
@@ -34,17 +35,21 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(HomePageActions.enterPage());
 
-    this.route.queryParams
-      .pipe(
-        map(({ chatId }) => chatId),
-        filter((chatId) => chatId),
-        take(1)
-      )
-      .subscribe((chatId) => this.onActivateChat(chatId));
+    this.route.queryParams.subscribe(({ chatId }) => {
+      if (chatId) {
+        this.onActivateChat(chatId);
+      } else {
+        this.onClearChat();
+      }
+    });
   }
 
   onActivateChat(chatId: string) {
     this.store.dispatch(HomePageActions.activateChat({ chatId }));
+  }
+
+  onClearChat() {
+    this.store.dispatch(HomePageActions.clearChat());
   }
 
   onSendMessage(chatId: string, body: string) {
@@ -56,5 +61,9 @@ export class HomeComponent implements OnInit {
       queryParams: { isShowingClients: previousValue ? undefined : true },
       queryParamsHandling: 'merge',
     });
+  }
+
+  onStartChat(participants: [IUser, IUser]) {
+    this.store.dispatch(HomePageActions.startChat({ participants }));
   }
 }

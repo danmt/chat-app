@@ -2,9 +2,15 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { Socket } from 'ngx-socket-io';
 
-import { HomePageActions, ChatsApiActions } from '../../home/actions';
+import {
+  HomePageActions,
+  ChatsApiActions,
+  ChatsSocketActions,
+} from '../../home/actions';
 import { ApiService } from '../services/api.service';
+import { ActionTypes, IChat } from '@chat-app/api-interface';
 
 @Injectable()
 export class ChatsEffects {
@@ -30,6 +36,20 @@ export class ChatsEffects {
     { dispatch: false }
   );
 
+  clearChat$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.clearChat),
+        map(() =>
+          this.router.navigate([''], {
+            queryParams: { chatId: undefined },
+            queryParamsHandling: 'merge',
+          })
+        )
+      ),
+    { dispatch: false }
+  );
+
   sendMessage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(HomePageActions.sendMessage),
@@ -41,7 +61,30 @@ export class ChatsEffects {
     )
   );
 
+  startChat$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.startChat),
+        tap(({ participants }) =>
+          this.socket.emit(ActionTypes.StartChat, { participants })
+        )
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
+  chatStarted$ = createEffect(() =>
+    this.socket.fromEvent<{ chat: IChat }>(ActionTypes.ChatStarted).pipe(
+      tap(({ chat }) =>
+        this.router.navigate([''], { queryParams: { chatId: chat._id } })
+      ),
+      map(({ chat }) => ChatsSocketActions.chatStarted({ chat }))
+    )
+  );
+
   constructor(
+    private socket: Socket,
     private actions$: Actions,
     private apiService: ApiService,
     private router: Router
