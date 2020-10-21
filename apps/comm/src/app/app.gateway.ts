@@ -12,7 +12,7 @@ export class AppGateway {
     this.logger.log(`Client disconnected: ${client.id}.`);
   }
 
-  handleConnect(client: Socket) {
+  handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}.`);
   }
 }
