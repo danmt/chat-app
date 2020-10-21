@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IUser } from '@chat-app/api-interface';
 
 @Component({
@@ -8,4 +8,13 @@ import { IUser } from '@chat-app/api-interface';
 export class ClientsComponent {
   @Input() clients!: IUser[] | null;
   @Input() currentUser!: IUser | null;
+  @Output() startChat = new EventEmitter<[IUser, IUser]>();
+
+  onStartChat(user: IUser) {
+    if (!this.currentUser) {
+      return;
+    }
+
+    this.startChat.emit([this.currentUser, user]);
+  }
 }

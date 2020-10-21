@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IUser } from '@chat-app/api-interface';
 import { Store } from '@ngrx/store';
 import { filter, map, take } from 'rxjs/operators';
 
@@ -56,5 +57,9 @@ export class HomeComponent implements OnInit {
       queryParams: { isShowingClients: previousValue ? undefined : true },
       queryParamsHandling: 'merge',
     });
+  }
+
+  onStartChat(participants: [IUser, IUser]) {
+    this.store.dispatch(HomePageActions.startChat({ participants }));
   }
 }
