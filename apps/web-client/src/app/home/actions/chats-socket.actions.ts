@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IChat, IUser } from '@chat-app/api-interface';
+import { IChat, IMessage, IUser } from '@chat-app/api-interface';
 
 export const clientsUpdated = createAction(
   '[ChatsSocket] Clients Updated',
@@ -12,4 +12,8 @@ export const chatStarted = createAction(
 export const chatDeleted = createAction(
   '[ChatsSocket] Chat Deleted',
   props<{ chatId: string }>()
+);
+export const messageSent = createAction(
+  '[ChatsSocket] Chat Sent',
+  props<{ message: IMessage }>()
 );

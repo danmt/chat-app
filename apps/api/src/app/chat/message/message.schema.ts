@@ -13,6 +13,9 @@ export class Message {
 
   @Prop()
   authorId: MongooseSchema.Types.ObjectId;
+
+  @Prop()
+  chatId: MongooseSchema.Types.ObjectId;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);

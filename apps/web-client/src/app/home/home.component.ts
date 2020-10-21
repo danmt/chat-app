@@ -52,8 +52,10 @@ export class HomeComponent implements OnInit {
     this.store.dispatch(HomePageActions.clearChat());
   }
 
-  onSendMessage(chatId: string, body: string) {
-    this.store.dispatch(HomePageActions.sendMessage({ chatId, body }));
+  onSendMessage(authorId: string, chatId: string, body: string) {
+    this.store.dispatch(
+      HomePageActions.sendMessage({ authorId, chatId, body })
+    );
   }
 
   onToggleShowClients(previousValue: boolean | undefined) {

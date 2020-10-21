@@ -18,7 +18,11 @@ import { IChat, IUser } from '@chat-app/api-interface';
 export class ChatComponent implements OnChanges {
   @Input() currentUser!: IUser | null;
   @Input() chat!: IChat | null;
-  @Output() sendMessage = new EventEmitter<{ chatId: string; body: string }>();
+  @Output() sendMessage = new EventEmitter<{
+    authorId: string;
+    chatId: string;
+    body: string;
+  }>();
   @ViewChild('chatInput') chatInput!: ElementRef<any>;
   chatGroup = this.fb.group({
     body: ['', [Validators.required]],
@@ -33,13 +37,13 @@ export class ChatComponent implements OnChanges {
   }
 
   onSendMessage(chatId?: string) {
-    if (this.chatGroup.invalid || !chatId) {
+    if (this.chatGroup.invalid || !chatId || !this.currentUser) {
       return;
     }
 
     const { body } = this.chatGroup.value;
 
-    this.sendMessage.emit({ chatId, body });
+    this.sendMessage.emit({ authorId: this.currentUser._id, chatId, body });
     this.chatInput.nativeElement.focus();
     this.chatGroup.reset();
   }
