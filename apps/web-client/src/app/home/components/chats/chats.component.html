@@ -9,6 +9,17 @@
   <div style="width: 230px;" class="pl-4">
     <h2 class="text-base font-bold truncate">
       {{ chat?.contact?.username }}
+
+      <span
+        *ngIf="chat?.contact?.isLoggedIn"
+        class="rounded-full w-2 h-2 ml-2 inline-block bg-green-500"
+        aria-label="is online"
+      ></span>
+      <span
+        *ngIf="!chat?.contact?.isLoggedIn"
+        class="rounded-full w-2 h-2 ml-2 inline-block bg-red-600"
+        aria-label="is offline"
+      ></span>
     </h2>
     <p class="text-sm text-gray-700 truncate">{{ chat?.lastMessage?.body }}</p>
   </div>

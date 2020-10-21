@@ -38,11 +38,6 @@ export const selectChats = createSelector(
   selectChatsState,
   fromChats.selectChatsData
 );
-export const selectChatsList = createSelector(
-  selectChats,
-  selectAuth,
-  fromChats.selectChatsList
-);
 export const selectChatsPending = createSelector(
   selectChatsState,
   fromChats.selectChatsPending
@@ -94,4 +89,11 @@ export const selectCurrentClient = createSelector(
   selectClients,
   selectAuth,
   fromClients.selectCurrentClient
+);
+
+export const selectChatsList = createSelector(
+  selectChats,
+  selectClients,
+  selectAuth,
+  fromChats.selectChatsList
 );

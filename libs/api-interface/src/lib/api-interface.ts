@@ -9,6 +9,7 @@ export interface IUser {
   username: string;
   thumbnail: string;
   clientId?: string;
+  isLoggedIn?: boolean;
 }
 
 export interface IChat {
