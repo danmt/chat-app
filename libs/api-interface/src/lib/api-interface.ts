@@ -25,5 +25,5 @@ export interface IChatTab {
 
 export enum ActionTypes {
   Connect = '[Web Client] Connect',
-  ClientConnected = '[Socket] Client Connected',
+  ClientsUpdated = '[Socket] Clients Updated',
 }

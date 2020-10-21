@@ -28,12 +28,12 @@ export class SocketEffects {
     { dispatch: false }
   );
 
-  clientConnected$ = createEffect(() =>
+  clientsUpdated$ = createEffect(() =>
     this.socket
-      .fromEvent<IUser[]>(ActionTypes.ClientConnected)
+      .fromEvent<IUser[]>(ActionTypes.ClientsUpdated)
       .pipe(
         map((clients: IUser[]) =>
-          ChatsSocketActions.clientConnected({ clients })
+          ChatsSocketActions.clientsUpdated({ clients })
         )
       )
   );
