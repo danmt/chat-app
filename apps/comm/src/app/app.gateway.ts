@@ -72,4 +72,11 @@ export class AppGateway {
           .emit(ActionTypes.ChatDeleted, { chatId: payload.chatId })
       );
   }
+
+  @SubscribeMessage(ActionTypes.SendMessage)
+  sendMessage(
+    @MessageBody() payload: { authorId: string; chatId: string; body: string }
+  ) {
+    this.logger.log(`Send Message to chat ${payload.chatId}`);
+  }
 }
