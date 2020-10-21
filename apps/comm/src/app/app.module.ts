@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { AppGateway } from './app.gateway';
 
 @Module({
-  imports: [],
+  imports: [HttpModule],
   controllers: [],
   providers: [AppGateway],
 })
