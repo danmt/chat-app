@@ -82,6 +82,18 @@ export class ChatsEffects {
     }
   );
 
+  chatDeleted$ = createEffect(() =>
+    this.socket.fromEvent<{ chatId: string }>(ActionTypes.ChatDeleted).pipe(
+      tap(() =>
+        this.router.navigate([''], {
+          queryParams: { chatId: undefined },
+          queryParamsHandling: 'merge',
+        })
+      ),
+      map(({ chatId }) => ChatsSocketActions.chatDeleted({ chatId }))
+    )
+  );
+
   constructor(
     private socket: Socket,
     private actions$: Actions,

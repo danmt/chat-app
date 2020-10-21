@@ -66,6 +66,10 @@ export class AppGateway {
       .delete<{ chatId: string }>(
         `http://localhost:3333/api/chats/${payload.chatId}`
       )
-      .subscribe();
+      .subscribe(() =>
+        this.server
+          .to(payload.chatId)
+          .emit(ActionTypes.ChatDeleted, { chatId: payload.chatId })
+      );
   }
 }

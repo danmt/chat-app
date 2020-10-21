@@ -9,3 +9,7 @@ export const chatStarted = createAction(
   '[ChatsSocket] Chat Started',
   props<{ chat: IChat }>()
 );
+export const chatDeleted = createAction(
+  '[ChatsSocket] Chat Deleted',
+  props<{ chatId: string }>()
+);
