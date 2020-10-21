@@ -37,7 +37,16 @@ export class AppGateway {
     this.logger.log(
       `Connect: ${payload.username} (${payload._id}/${client.id}) - ${this.connectedClients.length} connected clients.`
     );
-    this.server.emit(ActionTypes.ClientsUpdated, this.connectedClients);
+    this.httpService
+      .get<IChat[]>('http://localhost:3333/api/chats', {
+        headers: { id: payload._id },
+      })
+      .subscribe(({ data: chats }) => {
+        // Join every chat room where the user is part of
+        chats.forEach((chat) => client.join(chat._id));
+        // Emit to every client the full list of connected clients
+        this.server.emit(ActionTypes.ClientsUpdated, this.connectedClients);
+      });
   }
 
   @SubscribeMessage(ActionTypes.StartChat)
