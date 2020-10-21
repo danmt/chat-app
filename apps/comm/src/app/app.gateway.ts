@@ -47,6 +47,14 @@ export class AppGateway {
     );
     this.httpService
       .post<IChat>('http://localhost:3333/api/chats', payload)
-      .subscribe();
+      .subscribe(({ data: chat }) => {
+        // Add both participants to the chat room
+        payload.participants.forEach((participant) => {
+          const socket = this.server.sockets.connected[participant.clientId];
+          if (socket) {
+            socket.join(chat._id);
+          }
+        });
+      });
   }
 }
