@@ -2,6 +2,7 @@ export interface IMessage {
   body: string;
   date: Date;
   authorId: string;
+  chatId: string;
 }
 
 export interface IUser {

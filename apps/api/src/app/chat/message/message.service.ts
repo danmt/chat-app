@@ -17,6 +17,7 @@ export class MessageService {
       body,
       date: new Date(Date.now()),
       authorId,
+      chatId,
     }).toObject();
 
     await this.chatModel.updateOne(
