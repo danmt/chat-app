@@ -31,4 +31,5 @@ export enum ActionTypes {
   ChatStarted = '[Socket] Chat Started',
   DeleteChat = '[Web Client] Delete Chat',
   ChatDeleted = '[Socket] Chat Deleted',
+  SendMessage = '[Web Client] Send Message',
 }

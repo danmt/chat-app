@@ -32,7 +32,9 @@
         *ngIf="chat$ | async as chat"
         [chat]="chat"
         [currentUser]="currentUser$ | async"
-        (sendMessage)="onSendMessage($event.chatId, $event.body)"
+        (sendMessage)="
+          onSendMessage($event.authorId, $event.chatId, $event.body)
+        "
       ></wc-chat>
     </main>
   </div>

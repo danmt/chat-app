@@ -50,15 +50,17 @@ export class ChatsEffects {
     { dispatch: false }
   );
 
-  sendMessage$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(HomePageActions.sendMessage),
-      mergeMap(({ chatId, body }) =>
-        this.apiService
-          .sendMessage(chatId, body)
-          .pipe(map((message) => ChatsApiActions.messageSent({ message })))
-      )
-    )
+  sendMessage$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.sendMessage),
+        tap(({ authorId, chatId, body }) =>
+          this.socket.emit(ActionTypes.SendMessage, { authorId, chatId, body })
+        )
+      ),
+    {
+      dispatch: false,
+    }
   );
 
   startChat$ = createEffect(

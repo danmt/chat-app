@@ -9,7 +9,7 @@ export const activateChat = createAction(
 export const clearChat = createAction('[HomePage] Clear Chat');
 export const sendMessage = createAction(
   '[HomePage] Send Message',
-  props<{ chatId: string; body: string }>()
+  props<{ authorId: string; chatId: string; body: string }>()
 );
 export const startChat = createAction(
   '[HomePage] Start Chat',
