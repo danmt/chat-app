@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, map, take } from 'rxjs/operators';
 
@@ -11,15 +11,24 @@ import { HomePageActions } from './actions';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
-  currentUser$ = this.store.select(fromApp.selectAuth);
+  currentUser$ = this.store.select(fromApp.selectCurrentClient);
   chats$ = this.store.select(fromApp.selectChatsList);
   activeChatId$ = this.store.select(fromApp.selectChatsActiveId);
   chat$ = this.store.select(fromApp.selectChat);
   receiver$ = this.store.select(fromApp.selectChatReceiver);
+  clients$ = this.store.select(fromApp.selectClientsReceivers);
+  hasReceivers$ = this.store.select(fromApp.selectClientsHasReceivers);
+  isShowingClients$ = this.route.queryParamMap.pipe(
+    map(
+      (queryParamMap) =>
+        !!(queryParamMap && queryParamMap.get('isShowingClients'))
+    )
+  );
 
   constructor(
     private store: Store<fromApp.State>,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -40,5 +49,12 @@ export class HomeComponent implements OnInit {
 
   onSendMessage(chatId: string, body: string) {
     this.store.dispatch(HomePageActions.sendMessage({ chatId, body }));
+  }
+
+  onToggleShowClients(previousValue: boolean | undefined) {
+    this.router.navigate([''], {
+      queryParams: { isShowingClients: previousValue ? undefined : true },
+      queryParamsHandling: 'merge',
+    });
   }
 }

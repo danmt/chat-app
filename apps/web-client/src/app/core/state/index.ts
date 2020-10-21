@@ -80,3 +80,18 @@ export const selectClientsError = createSelector(
   selectClientsState,
   fromClients.selectClientsError
 );
+export const selectClientsReceivers = createSelector(
+  selectClients,
+  selectChats,
+  selectAuth,
+  fromClients.selectClientsReceivers
+);
+export const selectClientsHasReceivers = createSelector(
+  selectClientsReceivers,
+  fromClients.selectClientsHasReceivers
+);
+export const selectCurrentClient = createSelector(
+  selectClients,
+  selectAuth,
+  fromClients.selectCurrentClient
+);
