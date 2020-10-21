@@ -47,14 +47,18 @@ const chatReducer = createReducer(
     error: action.error,
     data: null,
   })),
-  on(ChatsApiActions.messageSent, (state, action) => ({
+  on(ChatsSocketActions.messageSent, (state, action) => ({
     ...state,
     data: !state.data
       ? null
-      : state.data.map((chat) => ({
-          ...chat,
-          messages: [...chat.messages, action.message],
-        })),
+      : state.data.map((chat) =>
+          chat._id === action.message.chatId
+            ? {
+                ...chat,
+                messages: [...chat.messages, action.message],
+              }
+            : chat
+        ),
   })),
   on(ChatsSocketActions.chatStarted, (state, action) => {
     if (!state.data) {

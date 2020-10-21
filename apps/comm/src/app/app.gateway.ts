@@ -92,6 +92,10 @@ export class AppGateway {
         `http://localhost:3333/api/chats/${payload.chatId}/messages`,
         { authorId: payload.authorId, body: payload.body }
       )
-      .subscribe();
+      .subscribe(({ data: message }) =>
+        this.server
+          .to(payload.chatId)
+          .emit(ActionTypes.MessageSent, { message })
+      );
   }
 }

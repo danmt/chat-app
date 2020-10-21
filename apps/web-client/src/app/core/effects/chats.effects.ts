@@ -10,7 +10,7 @@ import {
   ChatsSocketActions,
 } from '../../home/actions';
 import { ApiService } from '../services/api.service';
-import { ActionTypes, IChat } from '@chat-app/api-interface';
+import { ActionTypes, IChat, IMessage } from '@chat-app/api-interface';
 
 @Injectable()
 export class ChatsEffects {
@@ -61,6 +61,12 @@ export class ChatsEffects {
     {
       dispatch: false,
     }
+  );
+
+  messageSent$ = createEffect(() =>
+    this.socket
+      .fromEvent<{ message: IMessage }>(ActionTypes.MessageSent)
+      .pipe(map(({ message }) => ChatsSocketActions.messageSent({ message })))
   );
 
   startChat$ = createEffect(
