@@ -8,6 +8,7 @@ export interface IUser {
   _id: string;
   username: string;
   thumbnail: string;
+  clientId?: string;
 }
 
 export interface IChat {
