@@ -37,4 +37,11 @@ export class AppGateway {
     );
     this.server.emit(ActionTypes.ClientsUpdated, this.connectedClients);
   }
+
+  @SubscribeMessage(ActionTypes.StartChat)
+  startChat(@MessageBody() payload: { participants: [IUser, IUser] }) {
+    this.logger.log(
+      `Start Chat: Between ${payload.participants[0]._id} and ${payload.participants[1]._id}`
+    );
+  }
 }
