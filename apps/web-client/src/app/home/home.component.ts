@@ -62,4 +62,8 @@ export class HomeComponent implements OnInit {
   onStartChat(participants: [IUser, IUser]) {
     this.store.dispatch(HomePageActions.startChat({ participants }));
   }
+
+  onDeleteChat(chatId: string) {
+    this.store.dispatch(HomePageActions.deleteChat({ chatId }));
+  }
 }

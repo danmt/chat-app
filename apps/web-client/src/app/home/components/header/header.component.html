@@ -27,6 +27,13 @@
           {{ receiver?.username }}
         </p>
       </div>
+      <button
+        *ngIf="activeChatId"
+        class="text-2xl px-2 mr-4"
+        (click)="onDeleteChat(activeChatId)"
+      >
+        X
+      </button>
     </div>
   </div>
 </div>

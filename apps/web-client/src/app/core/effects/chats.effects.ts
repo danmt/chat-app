@@ -69,6 +69,19 @@ export class ChatsEffects {
     )
   );
 
+  deleteChat$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.deleteChat),
+        tap(({ chatId }) =>
+          this.socket.emit(ActionTypes.DeleteChat, { chatId })
+        )
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
   constructor(
     private socket: Socket,
     private actions$: Actions,
