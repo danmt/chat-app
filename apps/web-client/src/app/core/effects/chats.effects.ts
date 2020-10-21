@@ -36,6 +36,20 @@ export class ChatsEffects {
     { dispatch: false }
   );
 
+  clearChat$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.clearChat),
+        map(() =>
+          this.router.navigate([''], {
+            queryParams: { chatId: undefined },
+            queryParamsHandling: 'merge',
+          })
+        )
+      ),
+    { dispatch: false }
+  );
+
   sendMessage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(HomePageActions.sendMessage),

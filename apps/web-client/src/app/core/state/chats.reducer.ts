@@ -31,6 +31,10 @@ const chatReducer = createReducer(
     ...state,
     activeId: action.chatId,
   })),
+  on(HomePageActions.clearChat, (state) => ({
+    ...state,
+    activeId: null,
+  })),
   on(ChatsApiActions.getChatsSuccess, (state, action) => ({
     ...state,
     pending: false,
