@@ -4,9 +4,13 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { Socket } from 'ngx-socket-io';
 
-import { HomePageActions, ChatsApiActions } from '../../home/actions';
+import {
+  HomePageActions,
+  ChatsApiActions,
+  ChatsSocketActions,
+} from '../../home/actions';
 import { ApiService } from '../services/api.service';
-import { ActionTypes } from '@chat-app/api-interface';
+import { ActionTypes, IChat } from '@chat-app/api-interface';
 
 @Injectable()
 export class ChatsEffects {
@@ -54,6 +58,15 @@ export class ChatsEffects {
     {
       dispatch: false,
     }
+  );
+
+  chatStarted$ = createEffect(() =>
+    this.socket.fromEvent<{ chat: IChat }>(ActionTypes.ChatStarted).pipe(
+      tap(({ chat }) =>
+        this.router.navigate([''], { queryParams: { chatId: chat._id } })
+      ),
+      map(({ chat }) => ChatsSocketActions.chatStarted({ chat }))
+    )
   );
 
   constructor(

@@ -55,6 +55,7 @@ export class AppGateway {
             socket.join(chat._id);
           }
         });
+        this.server.to(chat._id).emit(ActionTypes.ChatStarted, { chat });
       });
   }
 }
