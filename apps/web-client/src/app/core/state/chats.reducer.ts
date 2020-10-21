@@ -65,6 +65,16 @@ const chatReducer = createReducer(
       ...state,
       data: [...state.data, action.chat],
     };
+  }),
+  on(ChatsSocketActions.chatDeleted, (state, action) => {
+    if (!state.data) {
+      return state;
+    }
+
+    return {
+      ...state,
+      data: state.data.filter((chat) => chat._id !== action.chatId),
+    };
   })
 );
 

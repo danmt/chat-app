@@ -83,6 +83,31 @@ export class ChatsEffects {
     )
   );
 
+  deleteChat$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(HomePageActions.deleteChat),
+        tap(({ chatId }) =>
+          this.socket.emit(ActionTypes.DeleteChat, { chatId })
+        )
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
+  chatDeleted$ = createEffect(() =>
+    this.socket.fromEvent<{ chatId: string }>(ActionTypes.ChatDeleted).pipe(
+      tap(() =>
+        this.router.navigate([''], {
+          queryParams: { chatId: undefined },
+          queryParamsHandling: 'merge',
+        })
+      ),
+      map(({ chatId }) => ChatsSocketActions.chatDeleted({ chatId }))
+    )
+  );
+
   constructor(
     private socket: Socket,
     private actions$: Actions,
