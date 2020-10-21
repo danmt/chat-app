@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { IChat, IMessage, IUser } from '@chat-app/api-interface';
 
-export const clientConnected = createAction(
-  '[ChatsSocket] Client Connected',
+export const clientsListUpdated = createAction(
+  '[ChatsSocket] Clients List Updated',
   props<{ clients: IUser[] }>()
 );
 export const chatStarted = createAction(

@@ -5,7 +5,7 @@ import { Socket } from 'ngx-socket-io';
 import { of } from 'rxjs';
 import { concatMap, map, tap, withLatestFrom } from 'rxjs/operators';
 
-import { ActionTypes, IUser } from '@chat-app/api-interface';
+import { ActionTypes, IClient, IUser } from '@chat-app/api-interface';
 import { ChatsSocketActions, HomePageActions } from '../../home/actions';
 import * as fromApp from '../state';
 
@@ -23,18 +23,16 @@ export class SocketEffects {
             )
           )
         ),
-        tap((user) => this.socket.emit(ActionTypes.Connect, user))
+        tap((user) => this.socket.emit(ActionTypes.AttemptConnection, user))
       ),
     { dispatch: false }
   );
 
   clientConnected$ = createEffect(() =>
     this.socket
-      .fromEvent<IUser[]>(ActionTypes.ClientConnected)
+      .fromEvent<{ clients: IUser[] }>(ActionTypes.ClientsListUpdated)
       .pipe(
-        map((clients: IUser[]) =>
-          ChatsSocketActions.clientConnected({ clients })
-        )
+        map(({ clients }) => ChatsSocketActions.clientsListUpdated({ clients }))
       )
   );
 

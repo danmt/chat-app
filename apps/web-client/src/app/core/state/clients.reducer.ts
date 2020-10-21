@@ -17,12 +17,15 @@ export const initialState = {
 
 const clientsReducer = createReducer(
   initialState,
-  on(ChatsSocketActions.clientConnected, (state, action) => ({
-    ...state,
-    pending: false,
-    data: action.clients,
-    error: null,
-  }))
+  on(ChatsSocketActions.clientsListUpdated, (state, action) => {
+    console.log(action);
+    return {
+      ...state,
+      pending: false,
+      data: action.clients,
+      error: null,
+    };
+  })
 );
 
 export function reducer(state = initialState, action: Action) {
@@ -43,6 +46,8 @@ export const selectClientsReceivers = (
   if (!clients || !currentUser || !chats) {
     return null;
   }
+
+  console.log(clients);
 
   return clients.filter(
     (client) =>

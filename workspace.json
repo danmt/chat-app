@@ -251,6 +251,56 @@
           }
         }
       }
+    },
+    "comms": {
+      "root": "apps/comms",
+      "sourceRoot": "apps/comms/src",
+      "projectType": "application",
+      "prefix": "comms",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/comms",
+            "main": "apps/comms/src/main.ts",
+            "tsConfig": "apps/comms/tsconfig.app.json",
+            "assets": ["apps/comms/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/comms/src/environments/environment.ts",
+                  "with": "apps/comms/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "comms:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/comms/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/comms/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -25,10 +25,18 @@ export interface IChatTab {
   lastMessage: IMessage | null;
 }
 
+export interface IClient {
+  _id: string;
+  user: IUser;
+  socketId: string;
+}
+
 export enum ActionTypes {
   Connect = '[Web Client] Connect',
   ClientConnected = '[Socket] Client Connected',
   ClientDisconnected = '[Socket] Client Disconnected',
+  AttemptConnection = '[Web Client] Attempt Connection',
+  ClientsListUpdated = '[Socket] Clients List Updated',
   StartChat = '[Web Client] Start Chat',
   ChatStarted = '[Socket] Chat Started',
   DeleteChat = '[Web Client] Delete Chat',

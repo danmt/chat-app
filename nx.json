@@ -38,6 +38,9 @@
     },
     "socket": {
       "tags": []
+    },
+    "comms": {
+      "tags": []
     }
   }
 }

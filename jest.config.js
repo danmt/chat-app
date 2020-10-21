@@ -4,5 +4,6 @@ module.exports = {
     '<rootDir>/libs/api-interface',
     '<rootDir>/apps/api',
     '<rootDir>/apps/socket',
+    '<rootDir>/apps/comms',
   ],
 };
