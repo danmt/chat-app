@@ -8,45 +8,37 @@ import {
 import { Server, Socket } from 'socket.io';
 import { HttpService, Logger } from '@nestjs/common';
 import { IUser, ActionTypes, IChat, IMessage } from '@chat-app/api-interface';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @WebSocketGateway()
 export class AppGateway {
   @WebSocketServer()
   server: Server;
   private logger: Logger = new Logger('AppGateway');
-  private connectedClients: IUser[] = [];
 
-  constructor(private httpService: HttpService) {}
+  constructor(
+    private httpService: HttpService,
+    @InjectQueue('connection-attempt')
+    private connectionAttemptQueue: Queue<IUser>,
+    @InjectQueue('connection-lost')
+    private connectionLostQueue: Queue<{ clientId: string }>
+  ) {}
 
   handleDisconnect(client: Socket) {
-    this.connectedClients = this.connectedClients.filter(
-      (connectedClient) => connectedClient.clientId !== client.id
-    );
-    this.logger.log(
-      `Disconnect: ${client.id} - ${this.connectedClients.length} connected clients.`
-    );
-    this.server.emit(ActionTypes.ClientsUpdated, this.connectedClients);
+    this.logger.log(`Disconnection Attempt: ${client.id}.`);
+    this.connectionLostQueue.add({ clientId: client.id });
   }
 
   @SubscribeMessage(ActionTypes.Connect)
   connect(@MessageBody() payload: IUser, @ConnectedSocket() client: Socket) {
-    this.connectedClients = [
-      ...this.connectedClients,
-      { ...payload, clientId: client.id },
-    ];
     this.logger.log(
-      `Connect: ${payload.username} (${payload._id}/${client.id}) - ${this.connectedClients.length} connected clients.`
+      `Connection Attempt: ${payload.username} (${payload._id}/${client.id}).`
     );
-    this.httpService
-      .get<IChat[]>('http://localhost:3333/api/chats', {
-        headers: { id: payload._id },
-      })
-      .subscribe(({ data: chats }) => {
-        // Join every chat room where the user is part of
-        chats.forEach((chat) => client.join(chat._id));
-        // Emit to every client the full list of connected clients
-        this.server.emit(ActionTypes.ClientsUpdated, this.connectedClients);
-      });
+    this.connectionAttemptQueue.add({
+      ...payload,
+      clientId: client.id,
+    });
   }
 
   @SubscribeMessage(ActionTypes.StartChat)

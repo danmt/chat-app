@@ -67,5 +67,7 @@ export const selectCurrentClient = (
     return null;
   }
 
+  console.log(clients, currentUser);
+
   return clients.find((client) => client._id === currentUser._id) || null;
 };

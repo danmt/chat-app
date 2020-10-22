@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IUser } from '@chat-app/api-interface';
 import { Store } from '@ngrx/store';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map, take, tap } from 'rxjs/operators';
 
 import * as fromApp from '../core/state';
 import { HomePageActions } from './actions';
@@ -12,7 +12,9 @@ import { HomePageActions } from './actions';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
-  currentUser$ = this.store.select(fromApp.selectCurrentClient);
+  currentUser$ = this.store
+    .select(fromApp.selectCurrentClient)
+    .pipe(tap((a) => console.log(a)));
   chats$ = this.store.select(fromApp.selectChatsList);
   activeChatId$ = this.store.select(fromApp.selectChatsActiveId);
   chat$ = this.store.select(fromApp.selectChat);
