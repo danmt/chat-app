@@ -8,6 +8,8 @@ export interface IUser {
   _id: string;
   username: string;
   thumbnail: string;
+  clientId?: string;
+  isLoggedIn?: boolean;
 }
 
 export interface IChat {
@@ -20,4 +22,9 @@ export interface IChatTab {
   _id: string;
   contact?: IUser;
   lastMessage?: IMessage;
+}
+
+export enum ActionTypes {
+  Connect = '[Web Client] Connect',
+  ClientsUpdated = '[Socket] Clients Updated',
 }

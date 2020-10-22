@@ -56,8 +56,12 @@ export function reducer(state = initialState, action: Action) {
 
 export const selectChatsData = (state: State) => state.data;
 export const selectChatsActiveId = (state: State) => state.activeId;
-export const selectChatsList = (chats: IChat[] | null, user: IUser | null) => {
-  if (!chats || !user) {
+export const selectChatsList = (
+  chats: IChat[] | null,
+  clients: IUser[] | null,
+  currentUser: IUser | null
+) => {
+  if (!chats || !currentUser || !clients) {
     return null;
   }
 
@@ -65,12 +69,21 @@ export const selectChatsList = (chats: IChat[] | null, user: IUser | null) => {
     (chat) =>
       ({
         _id: chat._id,
-        contact: chat.participants.find(
-          (participant: IUser) => user._id !== participant._id
+        lastMessage: chat.messages?.reduce(
+          (_: IMessage | null, message) => message,
+          null
         ),
-        lastMessage: chat.messages.find(
-          (message: IMessage) => user._id !== message.authorId
-        ),
+        contact: chat.participants
+          .filter((participant) => currentUser?._id !== participant._id)
+          .reduce(
+            (_: IUser | null, participant) => ({
+              ...participant,
+              isLoggedIn:
+                clients?.some((client) => client._id === participant._id) ||
+                false,
+            }),
+            null
+          ),
       } as IChatTab)
   );
 };

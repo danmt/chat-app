@@ -3,16 +3,24 @@
     <wc-header
       [receiver]="receiver$ | async"
       [currentUser]="currentUser$ | async"
+      [isShowingClients]="isShowingClients$ | async"
+      [hasReceivers]="hasReceivers$ | async"
+      (toggleShowClients)="onToggleShowClients($event)"
     ></wc-header>
   </header>
 
   <div class="flex" style="height: 660px;">
     <aside class="h-full border-r-2 inline-block" style="width: 400px;">
       <wc-chats
+        *ngIf="!(isShowingClients$ | async)"
         [chats]="chats$ | async"
         [activeChatId]="activeChatId$ | async"
         (activateChat)="onActivateChat($event)"
       ></wc-chats>
+      <wc-clients
+        *ngIf="isShowingClients$ | async"
+        [clients]="clients$ | async"
+      ></wc-clients>
     </aside>
 
     <main class="h-full inline-block" style="width: 800px;">
