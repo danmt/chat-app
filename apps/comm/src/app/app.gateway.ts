@@ -25,7 +25,9 @@ export class AppGateway {
     @InjectQueue('connection-lost')
     private connectionLostQueue: Queue<{ clientId: string }>,
     @InjectQueue('start-chat')
-    private startChatQueue: Queue<{ participants: [IUser, IUser] }>
+    private startChatQueue: Queue<{ participants: [IUser, IUser] }>,
+    @InjectQueue('delete-chat')
+    private deleteChatQueue: Queue<{ chatId: string }>
   ) {}
 
   getSocket(clientId: string) {
@@ -59,15 +61,7 @@ export class AppGateway {
   @SubscribeMessage(ActionTypes.DeleteChat)
   deleteChat(@MessageBody() payload: { chatId: string }) {
     this.logger.log(`Delete Chat ${payload.chatId}`);
-    this.httpService
-      .delete<{ chatId: string }>(
-        `http://localhost:3333/api/chats/${payload.chatId}`
-      )
-      .subscribe(() =>
-        this.server
-          .to(payload.chatId)
-          .emit(ActionTypes.ChatDeleted, { chatId: payload.chatId })
-      );
+    this.deleteChatQueue.add(payload);
   }
 
   @SubscribeMessage(ActionTypes.SendMessage)

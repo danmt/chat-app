@@ -4,6 +4,7 @@ import { AppGateway } from './app.gateway';
 import { ConnectionAttemptProcessor } from './connection-attempt.processor';
 import { ConnectionLostProcessor } from './connection-lost.processor';
 import { StartChatProcessor } from './start-chat.processor';
+import { DeleteChatProcessor } from './delete-chat.processor';
 
 @Module({
   imports: [
@@ -29,6 +30,13 @@ import { StartChatProcessor } from './start-chat.processor';
         port: 6379,
       },
     }),
+    BullModule.registerQueue({
+      name: 'delete-chat',
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
   ],
   controllers: [],
   providers: [
@@ -36,6 +44,7 @@ import { StartChatProcessor } from './start-chat.processor';
     ConnectionAttemptProcessor,
     ConnectionLostProcessor,
     StartChatProcessor,
+    DeleteChatProcessor,
   ],
 })
 export class AppModule {}
