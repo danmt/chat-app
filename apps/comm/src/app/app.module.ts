@@ -5,6 +5,7 @@ import { ConnectionAttemptProcessor } from './connection-attempt.processor';
 import { ConnectionLostProcessor } from './connection-lost.processor';
 import { StartChatProcessor } from './start-chat.processor';
 import { DeleteChatProcessor } from './delete-chat.processor';
+import { SendMessageProcessor } from './send-message.processor';
 
 @Module({
   imports: [
@@ -37,6 +38,13 @@ import { DeleteChatProcessor } from './delete-chat.processor';
         port: 6379,
       },
     }),
+    BullModule.registerQueue({
+      name: 'send-message',
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
   ],
   controllers: [],
   providers: [
@@ -45,6 +53,7 @@ import { DeleteChatProcessor } from './delete-chat.processor';
     ConnectionLostProcessor,
     StartChatProcessor,
     DeleteChatProcessor,
+    SendMessageProcessor,
   ],
 })
 export class AppModule {}

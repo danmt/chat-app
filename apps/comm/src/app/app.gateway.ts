@@ -6,7 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { HttpService, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 
@@ -19,7 +19,6 @@ export class AppGateway {
   private logger: Logger = new Logger('AppGateway');
 
   constructor(
-    private httpService: HttpService,
     @InjectQueue('connection-attempt')
     private connectionAttemptQueue: Queue<IUser>,
     @InjectQueue('connection-lost')
@@ -27,7 +26,9 @@ export class AppGateway {
     @InjectQueue('start-chat')
     private startChatQueue: Queue<{ participants: [IUser, IUser] }>,
     @InjectQueue('delete-chat')
-    private deleteChatQueue: Queue<{ chatId: string }>
+    private deleteChatQueue: Queue<{ chatId: string }>,
+    @InjectQueue('send-message')
+    private sendMessageQueue: Queue<IMessage>
   ) {}
 
   getSocket(clientId: string) {
@@ -65,19 +66,8 @@ export class AppGateway {
   }
 
   @SubscribeMessage(ActionTypes.SendMessage)
-  sendMessage(
-    @MessageBody() payload: { authorId: string; chatId: string; body: string }
-  ) {
+  sendMessage(@MessageBody() payload: IMessage) {
     this.logger.log(`Send Message to chat ${payload.chatId}`);
-    this.httpService
-      .post<IMessage>(
-        `http://localhost:3333/api/chats/${payload.chatId}/messages`,
-        { authorId: payload.authorId, body: payload.body }
-      )
-      .subscribe(({ data: message }) =>
-        this.server
-          .to(payload.chatId)
-          .emit(ActionTypes.MessageSent, { message })
-      );
+    this.sendMessageQueue.add(payload);
   }
 }
