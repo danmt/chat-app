@@ -1,8 +1,8 @@
 import { HttpModule, Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { AppGateway } from './app.gateway';
-import { ConnectionAttemptProcessor } from './connection-attempt.procesor';
-import { ConnectionLostProcessor } from './connection-lost.procesor';
+import { ConnectionAttemptProcessor } from './connection-attempt.processor';
+import { ConnectionLostProcessor } from './connection-lost.processor';
 
 @Module({
   imports: [

@@ -24,6 +24,7 @@ export class ConnectionLostProcessor {
           this.logger.log(
             `Connection Lost: ${disconnectedClient.username} (${disconnectedClient._id}/${disconnectedClient.clientId}) - ${connectedClients.length} connected clients.`
           );
+          // Emit clients updated event
           this.appGateway.server.emit(
             ActionTypes.ClientsUpdated,
             connectedClients

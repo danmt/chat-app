@@ -43,12 +43,10 @@ export class ConnectionAttemptProcessor {
           `Connection Established: ${connectedClient.username} (${connectedClient._id}/${connectedClient.clientId}) - ${connectedClients.length} connected clients.`
         );
         // Get client socket
-        const socket = this.appGateway.server.sockets.connected[
-          connectedClient.clientId
-        ];
+        const socket = this.appGateway.getSocket(connectedClient.clientId);
+        // if the socket is valid, join to each chat
         if (socket) {
-          // if the socket is valid, join to each chat
-          chats.forEach((chat) => socket.join(chat._id));
+          socket.join(chats.map((chat) => chat._id));
         }
         // Emit a clients updated event
         this.appGateway.server.emit(
