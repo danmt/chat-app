@@ -3,7 +3,7 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
 import { ActionTypes, IUser } from '@chat-app/api-interface';
-import { AppGateway } from './app.gateway';
+import { AppGateway } from '../app.gateway';
 
 @Processor('connection-lost')
 export class ConnectionLostProcessor {

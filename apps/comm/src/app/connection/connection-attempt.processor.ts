@@ -4,7 +4,7 @@ import { Job } from 'bull';
 import { map, mergeMap } from 'rxjs/operators';
 
 import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
-import { AppGateway } from './app.gateway';
+import { AppGateway } from '../app.gateway';
 
 @Processor('connection-attempt')
 export class ConnectionAttemptProcessor {

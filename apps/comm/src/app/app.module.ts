@@ -1,11 +1,11 @@
 import { HttpModule, Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { AppGateway } from './app.gateway';
-import { ConnectionAttemptProcessor } from './connection-attempt.processor';
-import { ConnectionLostProcessor } from './connection-lost.processor';
-import { StartChatProcessor } from './start-chat.processor';
-import { DeleteChatProcessor } from './delete-chat.processor';
-import { SendMessageProcessor } from './send-message.processor';
+import { ConnectionAttemptProcessor } from './connection/connection-attempt.processor';
+import { ConnectionLostProcessor } from './connection//connection-lost.processor';
+import { StartChatProcessor } from './chat/start-chat.processor';
+import { DeleteChatProcessor } from './chat/delete-chat.processor';
+import { SendMessageProcessor } from './message/send-message.processor';
 
 @Module({
   imports: [

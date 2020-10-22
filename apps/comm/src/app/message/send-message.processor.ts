@@ -3,7 +3,7 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
 import { ActionTypes, IMessage } from '@chat-app/api-interface';
-import { AppGateway } from './app.gateway';
+import { AppGateway } from '../app.gateway';
 
 @Processor('send-message')
 export class SendMessageProcessor {
