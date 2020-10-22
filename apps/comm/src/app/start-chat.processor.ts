@@ -1,7 +1,8 @@
-import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
 import { Process, Processor } from '@nestjs/bull';
 import { HttpService, Logger } from '@nestjs/common';
 import { Job } from 'bull';
+
+import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
 import { AppGateway } from './app.gateway';
 
 @Processor('start-chat')

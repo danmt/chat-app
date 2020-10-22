@@ -7,9 +7,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { HttpService, Logger } from '@nestjs/common';
-import { IUser, ActionTypes, IMessage } from '@chat-app/api-interface';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+
+import { IUser, ActionTypes, IMessage } from '@chat-app/api-interface';
 
 @WebSocketGateway()
 export class AppGateway {

@@ -1,9 +1,10 @@
-import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
 import { Process, Processor } from '@nestjs/bull';
 import { HttpService, Logger } from '@nestjs/common';
 import { Job } from 'bull';
-import { AppGateway } from './app.gateway';
 import { map, mergeMap } from 'rxjs/operators';
+
+import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
+import { AppGateway } from './app.gateway';
 
 @Processor('connection-attempt')
 export class ConnectionAttemptProcessor {
