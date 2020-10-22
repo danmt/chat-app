@@ -30,7 +30,10 @@ export class ChatsEffects {
       this.actions$.pipe(
         ofType(HomePageActions.activateChat),
         tap(({ chatId }) =>
-          this.router.navigate([''], { queryParams: { chatId } })
+          this.router.navigate([''], {
+            queryParams: { chatId },
+            queryParamsHandling: 'merge',
+          })
         )
       ),
     { dispatch: false }
