@@ -3,7 +3,7 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
 import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
-import { AppGateway } from '../app.gateway';
+import { SocketService } from '../config/socket/socket.service';
 
 @Processor('start-chat')
 export class StartChatProcessor {
@@ -11,7 +11,7 @@ export class StartChatProcessor {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly appGateway: AppGateway
+    private readonly socketService: SocketService
   ) {}
 
   @Process()
@@ -24,13 +24,13 @@ export class StartChatProcessor {
         );
         // Add both participants to the chat room
         job.data.participants.forEach((participant) => {
-          const socket = this.appGateway.getSocket(participant.clientId);
+          const socket = this.socketService.getSocket(participant.clientId);
           if (socket) {
             socket.join(chat._id);
           }
         });
         // Emit chat started event after participants joined the room
-        this.appGateway.server
+        this.socketService.server
           .to(chat._id)
           .emit(ActionTypes.ChatStarted, { chat });
       });

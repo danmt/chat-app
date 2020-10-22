@@ -3,7 +3,7 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
 import { ActionTypes } from '@chat-app/api-interface';
-import { AppGateway } from '../app.gateway';
+import { SocketService } from '../config/socket/socket.service';
 
 @Processor('delete-chat')
 export class DeleteChatProcessor {
@@ -11,7 +11,7 @@ export class DeleteChatProcessor {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly appGateway: AppGateway
+    private readonly socketService: SocketService
   ) {}
 
   @Process()
@@ -23,7 +23,7 @@ export class DeleteChatProcessor {
       .subscribe(() => {
         this.logger.log(`Chat Deleted: ${job.data.chatId}`);
         // Emit chat deleted event after participants joined the room
-        this.appGateway.server
+        this.socketService.server
           .to(job.data.chatId)
           .emit(ActionTypes.ChatDeleted, { chatId: job.data.chatId });
       });

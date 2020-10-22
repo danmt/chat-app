@@ -3,7 +3,7 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
 import { ActionTypes, IUser } from '@chat-app/api-interface';
-import { AppGateway } from '../app.gateway';
+import { SocketService } from '../config/socket/socket.service';
 
 @Processor('connection-lost')
 export class ConnectionLostProcessor {
@@ -11,7 +11,7 @@ export class ConnectionLostProcessor {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly appGateway: AppGateway
+    private readonly socketService: SocketService
   ) {}
 
   @Process()
@@ -26,7 +26,7 @@ export class ConnectionLostProcessor {
             `Connection Lost: ${disconnectedClient.username} (${disconnectedClient._id}/${disconnectedClient.clientId}) - ${connectedClients.length} connected clients.`
           );
           // Emit clients updated event
-          this.appGateway.server.emit(
+          this.socketService.server.emit(
             ActionTypes.ClientsUpdated,
             connectedClients
           );

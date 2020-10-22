@@ -4,7 +4,7 @@ import { Job } from 'bull';
 import { map, mergeMap } from 'rxjs/operators';
 
 import { ActionTypes, IChat, IUser } from '@chat-app/api-interface';
-import { AppGateway } from '../app.gateway';
+import { SocketService } from '../config/socket/socket.service';
 
 @Processor('connection-attempt')
 export class ConnectionAttemptProcessor {
@@ -12,7 +12,7 @@ export class ConnectionAttemptProcessor {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly appGateway: AppGateway
+    private readonly socketService: SocketService
   ) {}
 
   @Process()
@@ -44,13 +44,13 @@ export class ConnectionAttemptProcessor {
           `Connection Established: ${connectedClient.username} (${connectedClient._id}/${connectedClient.clientId}) - ${connectedClients.length} connected clients.`
         );
         // Get client socket
-        const socket = this.appGateway.getSocket(connectedClient.clientId);
+        const socket = this.socketService.getSocket(connectedClient.clientId);
         // if the socket is valid, join to each chat
         if (socket) {
           socket.join(chats.map((chat) => chat._id));
         }
         // Emit a clients updated event
-        this.appGateway.server.emit(
+        this.socketService.server.emit(
           ActionTypes.ClientsUpdated,
           connectedClients
         );

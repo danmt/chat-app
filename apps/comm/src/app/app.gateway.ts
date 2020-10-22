@@ -3,9 +3,8 @@ import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
@@ -14,8 +13,6 @@ import { IUser, ActionTypes, IMessage } from '@chat-app/api-interface';
 
 @WebSocketGateway()
 export class AppGateway {
-  @WebSocketServer()
-  server: Server;
   private logger: Logger = new Logger('AppGateway');
 
   constructor(
@@ -30,10 +27,6 @@ export class AppGateway {
     @InjectQueue('send-message')
     private sendMessageQueue: Queue<IMessage>
   ) {}
-
-  getSocket(clientId: string) {
-    return this.server.sockets.connected[clientId];
-  }
 
   handleDisconnect(client: Socket) {
     this.logger.log(`Disconnection Attempt: ${client.id}.`);

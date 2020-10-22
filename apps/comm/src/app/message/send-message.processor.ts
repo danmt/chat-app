@@ -3,7 +3,7 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
 import { ActionTypes, IMessage } from '@chat-app/api-interface';
-import { AppGateway } from '../app.gateway';
+import { SocketService } from '../config/socket/socket.service';
 
 @Processor('send-message')
 export class SendMessageProcessor {
@@ -11,7 +11,7 @@ export class SendMessageProcessor {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly appGateway: AppGateway
+    private readonly socketService: SocketService
   ) {}
 
   @Process()
@@ -24,7 +24,7 @@ export class SendMessageProcessor {
       .subscribe(({ data: message }) => {
         this.logger.log(`Message sent: ${job.data.chatId}`);
         // Emit message to the chat room
-        this.appGateway.server
+        this.socketService.server
           .to(job.data.chatId)
           .emit(ActionTypes.MessageSent, { message });
       });

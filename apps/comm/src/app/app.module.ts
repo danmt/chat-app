@@ -6,10 +6,12 @@ import { ConnectionLostProcessor } from './connection//connection-lost.processor
 import { StartChatProcessor } from './chat/start-chat.processor';
 import { DeleteChatProcessor } from './chat/delete-chat.processor';
 import { SendMessageProcessor } from './message/send-message.processor';
+import { SocketModule } from './config/socket/socket.module';
 
 @Module({
   imports: [
     HttpModule,
+    SocketModule,
     BullModule.registerQueue({
       name: 'connection-attempt',
       redis: {
