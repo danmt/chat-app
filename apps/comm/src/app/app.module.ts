@@ -3,6 +3,7 @@ import { BullModule } from '@nestjs/bull';
 import { AppGateway } from './app.gateway';
 import { ConnectionAttemptProcessor } from './connection-attempt.processor';
 import { ConnectionLostProcessor } from './connection-lost.processor';
+import { StartChatProcessor } from './start-chat.processor';
 
 @Module({
   imports: [
@@ -21,8 +22,20 @@ import { ConnectionLostProcessor } from './connection-lost.processor';
         port: 6379,
       },
     }),
+    BullModule.registerQueue({
+      name: 'start-chat',
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
   ],
   controllers: [],
-  providers: [AppGateway, ConnectionAttemptProcessor, ConnectionLostProcessor],
+  providers: [
+    AppGateway,
+    ConnectionAttemptProcessor,
+    ConnectionLostProcessor,
+    StartChatProcessor,
+  ],
 })
 export class AppModule {}
