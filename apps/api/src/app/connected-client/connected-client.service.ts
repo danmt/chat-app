@@ -15,13 +15,22 @@ export class ConnectedClientService {
   ) {}
 
   async connect(user: IUser) {
-    const connectedClient = await this.connectedClientModel.create({
-      _id: user._id,
-      username: user.username,
-      thumbnail: user.thumbnail,
-      clientId: user.clientId,
-    });
+    let connectedClient = await this.connectedClientModel.findById(user._id);
+
+    if (!connectedClient) {
+      connectedClient = await this.connectedClientModel.create({
+        _id: user._id,
+        username: user.username,
+        thumbnail: user.thumbnail,
+        clientId: user.clientId,
+      });
+    } else {
+      connectedClient.clientId = user.clientId;
+      await connectedClient.save();
+    }
+
     const connectedClients = await this.connectedClientModel.find({});
+
     return {
       connectedClient,
       connectedClients,
