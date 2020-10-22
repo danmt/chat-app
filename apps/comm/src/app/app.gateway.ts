@@ -7,7 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { HttpService, Logger } from '@nestjs/common';
-import { IUser, ActionTypes, IChat, IMessage } from '@chat-app/api-interface';
+import { IUser, ActionTypes, IMessage } from '@chat-app/api-interface';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 
@@ -22,8 +22,14 @@ export class AppGateway {
     @InjectQueue('connection-attempt')
     private connectionAttemptQueue: Queue<IUser>,
     @InjectQueue('connection-lost')
-    private connectionLostQueue: Queue<{ clientId: string }>
+    private connectionLostQueue: Queue<{ clientId: string }>,
+    @InjectQueue('start-chat')
+    private startChatQueue: Queue<{ participants: [IUser, IUser] }>
   ) {}
+
+  getSocket(clientId: string) {
+    return this.server.sockets.connected[clientId];
+  }
 
   handleDisconnect(client: Socket) {
     this.logger.log(`Disconnection Attempt: ${client.id}.`);
@@ -46,18 +52,7 @@ export class AppGateway {
     this.logger.log(
       `Start Chat: Between ${payload.participants[0]._id} and ${payload.participants[1]._id}`
     );
-    this.httpService
-      .post<IChat>('http://localhost:3333/api/chats', payload)
-      .subscribe(({ data: chat }) => {
-        // Add both participants to the chat room
-        payload.participants.forEach((participant) => {
-          const socket = this.server.sockets.connected[participant.clientId];
-          if (socket) {
-            socket.join(chat._id);
-          }
-        });
-        this.server.to(chat._id).emit(ActionTypes.ChatStarted, { chat });
-      });
+    this.startChatQueue.add(payload);
   }
 
   @SubscribeMessage(ActionTypes.DeleteChat)
